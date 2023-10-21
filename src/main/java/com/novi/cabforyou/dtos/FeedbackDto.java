@@ -1,35 +1,20 @@
-package com.novi.cabforyou.models;
+package com.novi.cabforyou.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.novi.cabforyou.models.Customer;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name="feedbacks")
-public class Feedback {
+public class FeedbackDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedbackId;
+    public Long feedbackId;
 
-//	@NotNull(message = "Add feedback here")
-    private String feedback;
+    public String feedback;
 
-//	@NotNull(message = "Please give rating")
-//  @Pattern(regexp = "^((?=.*[*])(?=.*[1-5])){2}$",
-//  message = "Rating must contain atleast 1 (*) and 1 digit from 1 to 5, length should be 2")
-    private Double rating;
+    public Double rating;
 
-//	@NotNull(message = "Enter the feedback submission date")
-//	@PastOrPresent
-//	@JsonFormat(pattern = "dd/mm/yyyy")
-    private LocalDate submitDate;
+    public LocalDate submitDate;
 
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Customer feedbackOfCustomer;
+    public Customer feedbackOfCustomer;
 
     public Long getFeedbackId() {
         return feedbackId;

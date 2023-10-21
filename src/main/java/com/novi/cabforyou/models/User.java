@@ -1,7 +1,6 @@
 package com.novi.cabforyou.models;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,11 +37,14 @@ public class User {
     @Column(name = "phone")
     private String phoneNumber;
 
-    public User(String username, String password, Set<Authority> authorities, String email) {
+    public User(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
         this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 
     public User() {

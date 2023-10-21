@@ -10,9 +10,6 @@ import java.time.LocalTime;
 @Table(name="completedtrips")
 public class CompletedTrips {
 
-    //If the BookingStatus is COMPLETED save in CompletedTrips date time numberOfPersons from to km and price.
-
-    //Completed trips needed for invoice...
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long completedTripId;

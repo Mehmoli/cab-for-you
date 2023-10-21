@@ -1,57 +1,46 @@
-package com.novi.cabforyou.models;
+package com.novi.cabforyou.dtos;
 
+import com.novi.cabforyou.models.Booking;
+import com.novi.cabforyou.models.BookingStatus;
+import com.novi.cabforyou.models.CarType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name="bookings")
-public class Booking {
+public class BookingDto {
 
-    @Id
-    @GeneratedValue
-    Long bookingId;
+    public CustomerDto customer;
+    public Long bookingId;
 
-    @ManyToOne
-    private Customer customer;
+    public LocalDate tripDate;
 
-    @OneToOne
-    private CompletedTrips completedTrip;
-
-    private LocalDate tripDate;
-
-    private LocalTime tripTime;
+    public LocalTime tripTime;
 
     //From
-    private String fromStreet;
-    private String fromHouseNumber;
-    private String fromPostalCode;
-    private String fromCity;
+    public String fromStreet;
+    public String fromHouseNumber;
+    public String fromPostalCode;
+    public String fromCity;
 
 
     //To
-    private String toStreet;
-    private String toHouseNumber;
-    private String toPostalCode;
-    private String toCity;
+    public String toStreet;
+    public String toHouseNumber;
+    public String toPostalCode;
+    public String toCity;
 
+    public int numberOfPeople;
 
-    private int numberOfPeople;
+    public double distanceInKm;
 
-    private double distanceInKm;
+    public double price;
 
-    private double price = distanceInKm * 2.60;
+    @Enumerated
+    public CarType carType;
 
-    @Enumerated(EnumType.STRING)
-    private CarType carType;
-
-    @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
+    @Enumerated
+    public BookingStatus bookingStatus;
 
     public Long getBookingId() {
         return bookingId;
@@ -59,22 +48,6 @@ public class Booking {
 
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public CompletedTrips getCompletedTrip() {
-        return completedTrip;
-    }
-
-    public void setCompletedTrip(CompletedTrips completedTrip) {
-        this.completedTrip = completedTrip;
     }
 
     public LocalDate getTripDate() {
