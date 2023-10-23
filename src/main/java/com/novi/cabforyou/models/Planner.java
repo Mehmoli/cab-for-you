@@ -11,9 +11,7 @@ import java.util.Set;
 @Table(name="planners")
 public class Planner extends User {
     private String plannerName;
-
     public Planner() {
-
     }
 
     public Planner(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String plannerName) {

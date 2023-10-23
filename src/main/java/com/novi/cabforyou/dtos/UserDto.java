@@ -6,15 +6,16 @@ import com.novi.cabforyou.models.Authority;
 import java.util.Set;
 
 public class UserDto {
+
     public String username;
+
     public String password;
+
     public String email;
-
     public String firstName;
-
     public String lastName;
-
     public String phoneNumber;
+
     public Set<Authority> authorities;
 
     public String getUsername() {
