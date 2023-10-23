@@ -2,21 +2,21 @@ package com.novi.cabforyou.dtos;
 
 import com.novi.cabforyou.models.Authority;
 
-
 import java.util.Set;
 
-public class UserDto {
+public class DriverDto {
 
     public String username;
 
     public String password;
+    public String driverCallSign;
 
     public String email;
-    public String firstName;
-    public String lastName;
-    public String phoneNumber;
+    public String driverPhone;
+    public String licenceNumber;
 
     public Set<Authority> authorities;
+
 
     public String getUsername() {
         return username;
@@ -34,6 +34,14 @@ public class UserDto {
         this.password = password;
     }
 
+    public String getDriverCallSign() {
+        return driverCallSign;
+    }
+
+    public void setDriverCallSign(String driverCallSign) {
+        this.driverCallSign = driverCallSign;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -42,28 +50,20 @@ public class UserDto {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getDriverPhone() {
+        return driverPhone;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setDriverPhone(String driverPhone) {
+        this.driverPhone = driverPhone;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLicenceNumber() {
+        return licenceNumber;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setLicenceNumber(String licenceNumber) {
+        this.licenceNumber = licenceNumber;
     }
 
     public Set<Authority> getAuthorities() {

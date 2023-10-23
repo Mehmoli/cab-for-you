@@ -1,6 +1,5 @@
 package com.novi.cabforyou.controllers;
 
-
 import com.novi.cabforyou.dtos.CustomerDto;
 import com.novi.cabforyou.services.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +10,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/cabforyou/customers")
 public class CustomerController {
-
     private CustomerService customerService;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping("")
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
@@ -22,11 +23,9 @@ public class CustomerController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("id") long id) {
-
-        CustomerDto dto = customerService.getCustomer(id);
-
+    @GetMapping("/{username}")
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("username") String username) {
+        CustomerDto dto = customerService.getCustomer(username);
         return ResponseEntity.ok(dto);
     }
 
@@ -36,16 +35,16 @@ public class CustomerController {
         return ResponseEntity.created(null).body(dto1);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") String username, @RequestBody CustomerDto dto) {
+    @PutMapping(value = "/{username}")
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("username") String username, @RequestBody CustomerDto dto) {
 
         customerService.updateCustomer(username, dto);
 
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Object> deleteCustomer(@PathVariable("id") String username) {
+    @DeleteMapping(value = "/{username}")
+    public ResponseEntity<Object> deleteCustomer(@PathVariable("username") String username) {
         customerService.deleteCustomer(username);
         return ResponseEntity.noContent().build();
     }
