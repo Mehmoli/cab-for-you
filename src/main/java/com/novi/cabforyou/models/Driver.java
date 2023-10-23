@@ -11,7 +11,9 @@ import java.util.Set;
 @Table(name="drivers")
 public class Driver extends User {
 
-    private String driverName = getFirstName()+ " " + getLastName();
+    private String driverCallSign;
+
+    private String driverPhone;
 
     private String licenceNumber;
 
@@ -20,21 +22,50 @@ public class Driver extends User {
 
     public Driver() {}
 
-    public Driver(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String driverName, String licenceNumber, List<Car> cars) {
+    public Driver(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String driverCallSign, String driverPhone, String licenceNumber, List<Car> cars) {
         super(username, password, authorities, email, firstName, lastName, phoneNumber);
-        this.driverName = driverName;
+        this.driverCallSign = driverCallSign;
+        this.driverPhone = driverPhone;
         this.licenceNumber = licenceNumber;
         this.cars = cars;
     }
 
-    public Driver(String driverName, String licenceNumber, List<Car> cars) {
-        this.driverName = driverName;
+    public Driver(String driverCallSign, String driverPhone, String licenceNumber, List<Car> cars) {
+        this.driverCallSign = driverCallSign;
+        this.driverPhone = driverPhone;
         this.licenceNumber = licenceNumber;
         this.cars = cars;
     }
 
-    public Driver(String driverName, String licenceNumber) {
-        this.driverName = driverName;
+    public String getDriverCallSign() {
+        return driverCallSign;
+    }
+
+    public void setDriverCallSign(String driverCallSign) {
+        this.driverCallSign = driverCallSign;
+    }
+
+    public String getDriverPhone() {
+        return driverPhone;
+    }
+
+    public void setDriverPhone(String driverPhone) {
+        this.driverPhone = driverPhone;
+    }
+
+    public String getLicenceNumber() {
+        return licenceNumber;
+    }
+
+    public void setLicenceNumber(String licenceNumber) {
         this.licenceNumber = licenceNumber;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
     }
 }
