@@ -23,4 +23,11 @@ public class Planner extends User {
         this.plannerName = plannerName;
     }
 
+    public String getPlannerName() {
+        return plannerName;
+    }
+
+    public void setPlannerName(String plannerName) {
+        this.plannerName = plannerName;
+    }
 }
