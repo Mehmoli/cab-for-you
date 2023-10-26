@@ -1,8 +1,6 @@
 package com.novi.cabforyou.dtos;
 
-import com.novi.cabforyou.models.Booking;
-import com.novi.cabforyou.models.BookingStatus;
-import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.models.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -16,31 +14,29 @@ public class BookingDto {
     public LocalDate tripDate;
 
     public LocalTime tripTime;
-
     //From
-    public String fromStreet;
-    public String fromHouseNumber;
-    public String fromPostalCode;
-    public String fromCity;
-
-
+    public FromAddress fromAddress;
     //To
-    public String toStreet;
-    public String toHouseNumber;
-    public String toPostalCode;
-    public String toCity;
-
+    public ToAddress toAddress;
     public int numberOfPeople;
 
     public double distanceInKm;
 
-    public double price;
+    public double tripKmPrice;
 
     @Enumerated
     public CarType carType;
 
     @Enumerated
     public BookingStatus bookingStatus;
+
+    public CustomerDto getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerDto customer) {
+        this.customer = customer;
+    }
 
     public Long getBookingId() {
         return bookingId;
@@ -66,68 +62,20 @@ public class BookingDto {
         this.tripTime = tripTime;
     }
 
-    public String getFromStreet() {
-        return fromStreet;
+    public FromAddress getFromAddress() {
+        return fromAddress;
     }
 
-    public void setFromStreet(String fromStreet) {
-        this.fromStreet = fromStreet;
+    public void setFromAddress(FromAddress fromAddress) {
+        this.fromAddress = fromAddress;
     }
 
-    public String getFromHouseNumber() {
-        return fromHouseNumber;
+    public ToAddress getToAddress() {
+        return toAddress;
     }
 
-    public void setFromHouseNumber(String fromHouseNumber) {
-        this.fromHouseNumber = fromHouseNumber;
-    }
-
-    public String getFromPostalCode() {
-        return fromPostalCode;
-    }
-
-    public void setFromPostalCode(String fromPostalCode) {
-        this.fromPostalCode = fromPostalCode;
-    }
-
-    public String getFromCity() {
-        return fromCity;
-    }
-
-    public void setFromCity(String fromCity) {
-        this.fromCity = fromCity;
-    }
-
-    public String getToStreet() {
-        return toStreet;
-    }
-
-    public void setToStreet(String toStreet) {
-        this.toStreet = toStreet;
-    }
-
-    public String getToHouseNumber() {
-        return toHouseNumber;
-    }
-
-    public void setToHouseNumber(String toHouseNumber) {
-        this.toHouseNumber = toHouseNumber;
-    }
-
-    public String getToPostalCode() {
-        return toPostalCode;
-    }
-
-    public void setToPostalCode(String toPostalCode) {
-        this.toPostalCode = toPostalCode;
-    }
-
-    public String getToCity() {
-        return toCity;
-    }
-
-    public void setToCity(String toCity) {
-        this.toCity = toCity;
+    public void setToAddress(ToAddress toAddress) {
+        this.toAddress = toAddress;
     }
 
     public int getNumberOfPeople() {
@@ -146,12 +94,13 @@ public class BookingDto {
         this.distanceInKm = distanceInKm;
     }
 
-    public double getPrice() {
-        return price;
+
+    public double getTripKmPrice() {
+        return tripKmPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setTripKmPrice(double tripKmPrice) {
+        this.tripKmPrice = tripKmPrice;
     }
 
     public CarType getCarType() {
@@ -169,4 +118,5 @@ public class BookingDto {
     public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }
+
 }
