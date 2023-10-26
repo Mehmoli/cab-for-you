@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name="bookings")
@@ -21,7 +18,7 @@ public class Booking {
     private Customer customer;
 
     @OneToOne
-    private CompletedTrips completedTrip;
+    private Invoice invoice;
 
     private LocalDate tripDate;
 
@@ -73,14 +70,6 @@ public class Booking {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public CompletedTrips getCompletedTrip() {
-        return completedTrip;
-    }
-
-    public void setCompletedTrip(CompletedTrips completedTrip) {
-        this.completedTrip = completedTrip;
     }
 
     public LocalDate getTripDate() {
