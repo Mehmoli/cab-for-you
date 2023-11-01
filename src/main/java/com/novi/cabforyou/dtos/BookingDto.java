@@ -8,7 +8,6 @@ import java.time.LocalTime;
 
 public class BookingDto {
 
-    public CustomerDto customer;
     public Long bookingId;
 
     public LocalDate tripDate;
@@ -22,7 +21,18 @@ public class BookingDto {
 
     public double distanceInKm;
 
-    public double tripKmPrice;
+    public double tripKmPriceMiniBus = 4.20;
+
+    public double tripKmPriceCar = 2.60;
+    public double tripPrice;
+
+    public double getTripPrice() {
+        return tripPrice;
+    }
+
+    public void setTripPrice(double tripPrice) {
+        this.tripPrice = tripPrice;
+    }
 
     @Enumerated
     public CarType carType;
@@ -30,13 +40,23 @@ public class BookingDto {
     @Enumerated
     public BookingStatus bookingStatus;
 
-    public CustomerDto getCustomer() {
-        return customer;
+
+    public double getTripKmPriceMiniBus() {
+        return tripKmPriceMiniBus;
     }
 
-    public void setCustomer(CustomerDto customer) {
-        this.customer = customer;
+    public void setTripKmPriceMiniBus(double tripKmPriceMiniBus) {
+        this.tripKmPriceMiniBus = tripKmPriceMiniBus;
     }
+
+    public double getTripKmPriceCar() {
+        return tripKmPriceCar;
+    }
+
+    public void setTripKmPriceCar(double tripKmPriceCar) {
+        this.tripKmPriceCar = tripKmPriceCar;
+    }
+
 
     public Long getBookingId() {
         return bookingId;
@@ -92,15 +112,6 @@ public class BookingDto {
 
     public void setDistanceInKm(double distanceInKm) {
         this.distanceInKm = distanceInKm;
-    }
-
-
-    public double getTripKmPrice() {
-        return tripKmPrice;
-    }
-
-    public void setTripKmPrice(double tripKmPrice) {
-        this.tripKmPrice = tripKmPrice;
     }
 
     public CarType getCarType() {

@@ -2,11 +2,12 @@ package com.novi.cabforyou.services;
 
 
 import com.novi.cabforyou.dtos.BookingDto;
+import com.novi.cabforyou.exceptions.BadRequestException;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.Booking;
-import com.novi.cabforyou.models.BookingStatus;
 import com.novi.cabforyou.repositories.BookingRepository;
 import org.springframework.stereotype.Service;
+import org.apache.commons.math3.util.Precision;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,14 @@ public class BookingService {
 
     public BookingDto addBooking(BookingDto bookingDto) {
         Booking booking =  transferToBooking(bookingDto);
+        double tripPrice = calculateTripPrice(
+                bookingDto.getNumberOfPeople(),
+                bookingDto.getTripKmPriceMiniBus(),
+                bookingDto.getTripKmPriceCar(),
+                bookingDto.getDistanceInKm()
+        );
+        bookingDto.setTripPrice(tripPrice);
+        booking.setTripPrice(tripPrice);
         bookingRepository.save(booking);
         return bookingDto;
     }
@@ -48,13 +57,16 @@ public class BookingService {
     public void updateBooking (Long id, BookingDto newBooking){
         if(!bookingRepository.existsById(id)) throw new RecordNotFoundException();
         Booking booking = bookingRepository.findById(id).get();
+
         booking.setTripDate(newBooking.getTripDate());
         booking.setTripTime(newBooking.getTripTime());
         booking.setFromAddress(newBooking.getFromAddress());
         booking.setToAddress(newBooking.getToAddress());
         booking.setNumberOfPeople(newBooking.getNumberOfPeople());
         booking.setDistanceInKm(newBooking.getDistanceInKm());
-        booking.setTripKmPrice(newBooking.getTripKmPrice());
+        booking.setTripKmPriceMiniBus(newBooking.getTripKmPriceMiniBus());
+        booking.setTripKmPriceCar(newBooking.getTripKmPriceCar());
+        booking.setTripPrice(newBooking.getTripPrice());
         booking.setCarType(newBooking.getCarType());
         booking.setBookingStatus(newBooking.getBookingStatus());
         bookingRepository.save(booking);
@@ -75,7 +87,9 @@ public class BookingService {
         booking.setToAddress(dto.getToAddress());
         booking.setNumberOfPeople(dto.getNumberOfPeople());
         booking.setDistanceInKm(dto.getDistanceInKm());
-        booking.setTripKmPrice(dto.getTripKmPrice());
+        booking.setTripKmPriceMiniBus(dto.getTripKmPriceMiniBus());
+        booking.setTripKmPriceCar(dto.getTripKmPriceCar());
+        booking.setTripPrice(dto.getTripPrice());
         booking.setCarType(dto.getCarType());
         booking.setBookingStatus(dto.getBookingStatus());
         //booking.setCustomer();
@@ -94,22 +108,23 @@ public class BookingService {
         dto.toAddress= booking.getToAddress();
         dto.numberOfPeople = booking.getNumberOfPeople();
         dto.distanceInKm = booking.getDistanceInKm();
-        dto.tripKmPrice = booking.getTripKmPrice();
+        dto.tripKmPriceMiniBus = booking.getTripKmPriceMiniBus();
+        dto.tripKmPriceCar = booking.getTripKmPriceCar();
+        dto.tripPrice = booking.getTripPrice();
         dto.carType = booking.getCarType();
         dto.bookingStatus = booking.getBookingStatus();
 
         return dto;
     }
 
-    public double getTripAmount(long bookingId) {
-        Optional<Booking> trip = bookingRepository.findById(bookingId);
-        if (trip.isPresent()) {
-            Booking tripbooking = trip.get();
-            if (tripbooking.getBookingStatus() == BookingStatus.COMPLETED) {
-                return tripbooking.calculateTripPrice();
-            }
+    public double calculateTripPrice(int numberOfPeople, double tripKmPriceMiniBus, double tripKmPriceCar, double distanceInKm) {
+        if (numberOfPeople > 8) {
+            throw new BadRequestException("We have no cars for more than 8 passengers");
+        } else if (numberOfPeople > 4) {
+            return Precision.round(tripKmPriceMiniBus * distanceInKm, 2);
+        } else {
+            return Precision.round(tripKmPriceCar * distanceInKm, 2);
         }
-        return -1;
     }
 
 }
