@@ -9,11 +9,11 @@ public class DriverDto {
     public String username;
 
     public String password;
-    public String driverCallSign;
 
     public String email;
-    public String driverPhone;
     public String licenceNumber;
+
+    public String phoneNumber;
 
     public Set<Authority> authorities;
 
@@ -34,13 +34,6 @@ public class DriverDto {
         this.password = password;
     }
 
-    public String getDriverCallSign() {
-        return driverCallSign;
-    }
-
-    public void setDriverCallSign(String driverCallSign) {
-        this.driverCallSign = driverCallSign;
-    }
 
     public String getEmail() {
         return email;
@@ -50,20 +43,20 @@ public class DriverDto {
         this.email = email;
     }
 
-    public String getDriverPhone() {
-        return driverPhone;
-    }
-
-    public void setDriverPhone(String driverPhone) {
-        this.driverPhone = driverPhone;
-    }
-
     public String getLicenceNumber() {
         return licenceNumber;
     }
 
     public void setLicenceNumber(String licenceNumber) {
         this.licenceNumber = licenceNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Set<Authority> getAuthorities() {
