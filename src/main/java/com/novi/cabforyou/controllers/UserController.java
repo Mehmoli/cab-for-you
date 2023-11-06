@@ -16,11 +16,9 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
     @GetMapping(value = "")
     public ResponseEntity<List<UserDto>> getUsers() {
 
@@ -29,7 +27,6 @@ public class UserController {
         return ResponseEntity.ok().body(userDtos);
     }
 
-    //Is OK
     @GetMapping(value = "/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) {
 
@@ -40,7 +37,6 @@ public class UserController {
 
     }
 
-//  CREATEUSER SO THE ROLE IS "ROLE_USER"
     @PostMapping(value = "")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto) {
 
@@ -55,7 +51,6 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    //Is OK
     @PutMapping(value = "/{username}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto dto) {
 
@@ -64,20 +59,17 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    //Is OK
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
-    //Is OK
     @GetMapping(value = "/{username}/authorities")
     public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
 
-    //Is OK
     @PostMapping(value = "/{username}/authorities")
     public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
         try {
@@ -89,7 +81,6 @@ public class UserController {
         }
     }
 
-    //Is OK
     @DeleteMapping(value = "/{username}/authorities/{authority}")
     public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
         userService.removeAuthority(username, authority);
