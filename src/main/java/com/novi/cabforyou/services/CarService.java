@@ -1,9 +1,9 @@
 package com.novi.cabforyou.services;
 
-import com.novi.cabforyou.dtos.CarDto;
+import com.novi.cabforyou.dtos.CabDto;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
-import com.novi.cabforyou.models.Car;
-import com.novi.cabforyou.repositories.CarRepository;
+import com.novi.cabforyou.models.Cab;
+import com.novi.cabforyou.repositories.CabRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,78 +11,78 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CarService {
+public class CabService {
 
-    private CarRepository carRepository;
+    private CabRepository cabRepository;
 
-    public CarService(CarRepository carRepository) {
-        this.carRepository = carRepository;
+    public CabService(CabRepository cabRepository) {
+        this.cabRepository = cabRepository;
     }
 
-    public List<CarDto> getAllCars() {
-        List<CarDto> carDto = new ArrayList<>();
-        List<Car> cars = carRepository.findAll();
-        for (Car c: cars){
-            carDto.add(transferToCarDto(c));
+    public List<CabDto> getAllCabs() {
+        List<CabDto> cabDto = new ArrayList<>();
+        List<Cab> cabs = cabRepository.findAll();
+        for (Cab c: cabs){
+            cabDto.add(transferToCabDto(c));
         }
-        return carDto;
+        return cabDto;
     }
 
 
-    public CarDto getCar(long id) {
-        Optional<Car> car = carRepository.findById(id);
-        if(!car.isPresent()){
+    public CabDto getCab(long id) {
+        Optional<Cab> cab = cabRepository.findById(id);
+        if(!cab.isPresent()){
             throw new RecordNotFoundException();
         } else {
-            return transferToCarDto(car.get());
+            return transferToCabDto(cab.get());
         }
     }
 
-    public CarDto addCar(CarDto carDto) {
-        Car car = transferToCar(carDto);
-        carRepository.save(car);
-        return carDto;
+    public CabDto addCab(CabDto cabDto) {
+        Cab cab = transferToCab(cabDto);
+        cabRepository.save(cab);
+        return cabDto;
 
     }
 
 
-    public void updateCar(long id, CarDto newCar) {
-        if(!carRepository.existsById(id)) throw new RecordNotFoundException();
-        Car car = carRepository.findById(id).get();
-        car.setMake(newCar.getMake());
-        car.setModel(newCar.getModel());
-        car.setAvailableSeats(newCar.getAvailableSeats());
-        car.setLicensePlate(newCar.getLicensePlate());
-        car.setCarType(newCar.getCarType());
+    public void updateCab(long id, CabDto newCab) {
+        if(!cabRepository.existsById(id)) throw new RecordNotFoundException();
+        Cab cab = cabRepository.findById(id).get();
+        cab.setMake(newCab.getMake());
+        cab.setModel(newCab.getModel());
+        cab.setAvailableSeats(newCab.getAvailableSeats());
+        cab.setLicensePlate(newCab.getLicensePlate());
+        cab.setCabType(newCab.getCabType());
 
-        carRepository.save(car);
+        cabRepository.save(cab);
     }
 
-    public void deleteCar(long id) {
-        carRepository.deleteById(id);
+    public void deleteCab(long id) {
+        cabRepository.deleteById(id);
     }
 
-    private Car transferToCar(CarDto carDto) {
-        Car car = new Car();
-        car.setCarId(carDto.getCarId());
-        car.setMake(carDto.getMake());
-        car.setModel(carDto.getModel());
-        car.setAvailableSeats(carDto.getAvailableSeats());
-        car.setLicensePlate(carDto.getLicensePlate());
-        car.setCarType(carDto.getCarType());
+    private Cab transferToCab(CabDto cabDto) {
+        Cab cab = new Cab();
+        cab.setCabId(cabDto.getCabId());
+        cab.setMake(cabDto.getMake());
+        cab.setModel(cabDto.getModel());
+        cab.setAvailableSeats(cabDto.getAvailableSeats());
+        cab.setLicensePlate(cabDto.getLicensePlate());
+        cab.setCabType(cabDto.getCabType());
 
-        return car;
+        return cab;
     }
 
-    private CarDto transferToCarDto(Car car) {
-        var dto = new CarDto();
+    private CabDto transferToCabDto(Cab cab) {
+        var dto = new CabDto();
 
-        dto.carId = car.getCarId();
-        dto.make = car.getMake();
-        dto.model = car.getModel();
-        dto.availableSeats = car.getAvailableSeats();
-        dto.licensePlate =car.getLicensePlate();
-        dto.carType =car.getCarType();
+        dto.cabId = cab.getCabId();
+        dto.make = cab.getMake();
+        dto.model = cab.getModel();
+        dto.availableSeats = cab.getAvailableSeats();
+        dto.licensePlate = cab.getLicensePlate();
+        dto.carType = cab.getCabType();
 
         return dto;
     }

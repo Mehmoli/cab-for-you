@@ -1,7 +1,7 @@
 package com.novi.cabforyou.controllers;
 
-import com.novi.cabforyou.dtos.CarDto;
-import com.novi.cabforyou.services.CarService;
+import com.novi.cabforyou.dtos.CabDto;
+import com.novi.cabforyou.services.CabService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,44 +9,44 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cabforyou/cars")
-public class CarController {
+public class CabController {
 
-    private CarService carService;
+    private CabService cabService;
 
-    public CarController(CarService carService) {
-        this.carService = carService;
+    public CabController(CabService cabService) {
+        this.cabService = cabService;
     }
 
     // Is OK
     @GetMapping("")
-    public ResponseEntity<List<CarDto>> getAllCars() {
+    public ResponseEntity<List<CabDto>> getAllCabs() {
 
-        List<CarDto> dtos = carService.getAllCars();
+        List<CabDto> dtos = cabService.getAllCabs();
 
         return ResponseEntity.ok(dtos);
     }
 
     // Is OK
     @GetMapping("/{id}")
-    public ResponseEntity<CarDto> getCar(@PathVariable("id") long id) {
+    public ResponseEntity<CabDto> getCab(@PathVariable("id") long id) {
 
-        CarDto dto = carService.getCar(id);
+        CabDto dto = cabService.getCab(id);
 
         return ResponseEntity.ok(dto);
     }
 
     //Is OK
     @PostMapping("")
-    public ResponseEntity<CarDto> addCar(@RequestBody CarDto dto) {
-        CarDto dto1 = carService.addCar(dto);
+    public ResponseEntity<CabDto> addCab(@RequestBody CabDto dto) {
+        CabDto dto1 = cabService.addCab(dto);
         return ResponseEntity.created(null).body(dto1);
     }
 
     //Is OK
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CarDto> updateCar(@PathVariable("id") long id, @RequestBody CarDto dto) {
+    public ResponseEntity<CabDto> updateCab(@PathVariable("id") long id, @RequestBody CabDto dto) {
 
-        carService.updateCar(id, dto);
+        cabService.updateCab(id, dto);
 
         return ResponseEntity.noContent().build();
     }
@@ -54,7 +54,7 @@ public class CarController {
     //Is OK
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") long id) {
-        carService.deleteCar(id);
+        cabService.deleteCab(id);
         return ResponseEntity.noContent().build();
     }
 

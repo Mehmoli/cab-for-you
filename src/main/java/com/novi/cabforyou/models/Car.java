@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="cars")
-public class Car {
+@Table(name="cabs")
+public class Cab {
 
     @Id
     @GeneratedValue
-    Long carId;
+    Long cabId;
 
     private String make;
 
@@ -23,18 +23,23 @@ public class Car {
     private String licensePlate;
 
     @Enumerated(EnumType.STRING)
-    CarType carType;
+    CarType carType = CarType.WAGON; //default value.
 
+    @OneToMany(
+            mappedBy = "cab",
+            fetch = FetchType.LAZY
+    )
+    List<Trip> trips;
 
     @ManyToMany
     List<Driver> drivers = new ArrayList<>();
 
-    public Long getCarId() {
-        return carId;
+    public Long getCabId() {
+        return cabId;
     }
 
-    public void setCarId(Long carId) {
-        this.carId = carId;
+    public void setCabId(Long cabId) {
+        this.cabId = cabId;
     }
 
     public String getMake() {
@@ -69,11 +74,11 @@ public class Car {
         this.licensePlate = licensePlate;
     }
 
-    public CarType getCarType() {
+    public CarType getCabType() {
         return carType;
     }
 
-    public void setCarType(CarType carType) {
+    public void setCabType(CarType carType) {
         this.carType = carType;
     }
 

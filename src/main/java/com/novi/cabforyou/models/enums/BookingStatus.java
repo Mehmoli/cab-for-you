@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum BookingStatus {
 
-    ACCEPTED("ACCEPTED"),
+    REQUEST("REQUEST"),
+    CONFIRMED("CONFIRMED"),
     CANCELED("CANCELED"),
     PENDING("PENDING"),
     COMPLETED("COMPLETED");

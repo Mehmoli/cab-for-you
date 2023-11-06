@@ -1,12 +1,16 @@
 package com.novi.cabforyou.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.novi.cabforyou.models.enums.BookingStatus;
+import com.novi.cabforyou.models.enums.CarType;
 import com.novi.cabforyou.models.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class BookingDto {
+public class BookingRequestDto {
 
     public Long bookingId;
 
@@ -17,22 +21,20 @@ public class BookingDto {
     public FromAddress fromAddress;
     //To
     public ToAddress toAddress;
+
     public int numberOfPeople;
 
     public double distanceInKm;
+    public double kmPrice;
 
-    public double tripKmPriceMiniBus = 4.20;
-
-    public double tripKmPriceCar = 2.60;
     public double tripPrice;
 
-    public double getTripPrice() {
-        return tripPrice;
-    }
-
-    public void setTripPrice(double tripPrice) {
-        this.tripPrice = tripPrice;
-    }
+    @JsonIncludeProperties("id")
+    public Customer customer;
+    @JsonIncludeProperties("id")
+    private Planner planner;
+    @JsonIncludeProperties("id")
+    public Trip trip;
 
     @Enumerated
     public CarType carType;
@@ -40,23 +42,8 @@ public class BookingDto {
     @Enumerated
     public BookingStatus bookingStatus;
 
-
-    public double getTripKmPriceMiniBus() {
-        return tripKmPriceMiniBus;
-    }
-
-    public void setTripKmPriceMiniBus(double tripKmPriceMiniBus) {
-        this.tripKmPriceMiniBus = tripKmPriceMiniBus;
-    }
-
-    public double getTripKmPriceCar() {
-        return tripKmPriceCar;
-    }
-
-    public void setTripKmPriceCar(double tripKmPriceCar) {
-        this.tripKmPriceCar = tripKmPriceCar;
-    }
-
+    @JsonIgnore
+    public  double selectedCarType = CarType.SEDAN.getPrice();
 
     public Long getBookingId() {
         return bookingId;
@@ -64,6 +51,14 @@ public class BookingDto {
 
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
+    }
+
+    public double getTripPrice() {
+        return tripPrice;
+    }
+
+    public void setTripPrice(double tripPrice) {
+        this.tripPrice = tripPrice;
     }
 
     public LocalDate getTripDate() {
@@ -114,6 +109,38 @@ public class BookingDto {
         this.distanceInKm = distanceInKm;
     }
 
+    public double getKmPrice() {
+        return kmPrice;
+    }
+
+    public void setKmPrice(double kmPrice) {
+        this.kmPrice = kmPrice;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Planner getPlanner() {
+        return planner;
+    }
+
+    public void setPlanner(Planner planner) {
+        this.planner = planner;
+    }
+
+    public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }
+
     public CarType getCarType() {
         return carType;
     }
@@ -128,6 +155,28 @@ public class BookingDto {
 
     public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
+    }
+
+    public double getSelectedCarType() {
+        return selectedCarType;
+    }
+
+    public void setSelectedCarType(double selectedCarType) {
+        this.selectedCarType = selectedCarType;
+    }
+
+    public BookingRequest transferToBooking() {
+        BookingRequest bookingRequest = new BookingRequest();
+        bookingRequest.setTripDate(tripDate);
+        bookingRequest.setTripTime(tripTime);
+        bookingRequest.setNumberOfPeople(numberOfPeople);
+        bookingRequest.setFromAddress(fromAddress);
+        bookingRequest.setToAddress(toAddress);
+        bookingRequest.setDistanceInKm(distanceInKm);
+        bookingRequest.setTripPrice(tripPrice);
+        bookingRequest.setTrip(trip);
+
+        return bookingRequest;
     }
 
 }

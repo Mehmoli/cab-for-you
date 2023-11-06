@@ -1,5 +1,8 @@
 package com.novi.cabforyou.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.novi.cabforyou.enums.BookingStatus;
+import com.novi.cabforyou.enums.CarType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -15,10 +18,14 @@ public class Booking {
     Long bookingId;
 
     @ManyToOne
+    @JsonIgnore
     private Customer customer;
 
-    @OneToOne
-    private Invoice invoice;
+    @JsonIgnore
+    @ManyToOne
+    private Trip trip;
+//    @ManyToOne
+//    private Invoice invoice;
 
     private LocalDate tripDate;
 
@@ -52,8 +59,6 @@ public class Booking {
 
     private  double tripKmPriceCar;
 
-//    private double busTripKmPrice;
-
     private double tripPrice;
     @Enumerated(EnumType.STRING)
     private CarType carType;
@@ -86,7 +91,7 @@ public class Booking {
     }
 
     public LocalDate getTripDate() {
-        return tripDate;
+        return this.tripDate;
     }
 
     public void setTripDate(LocalDate tripDate) {
@@ -149,13 +154,13 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-    }
+//    public Invoice getInvoice() {
+//        return invoice;
+//    }
+//
+//    public void setInvoice(Invoice invoice) {
+//        this.invoice = invoice;
+//    }
 
     public double getTripPrice() {
         return tripPrice;
@@ -165,5 +170,21 @@ public class Booking {
         this.tripPrice = tripPrice;
     }
 
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }
 
 }
