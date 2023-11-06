@@ -1,9 +1,12 @@
 package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.PlannerDto;
+import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Planner;
+import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.PlannerRepository;
+import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,12 @@ import java.util.Optional;
 @Service
 public class PlannerService {
 
-    private PlannerRepository plannerRepository;
+    private final PlannerRepository plannerRepository;
+    private final TripRepository tripRepository;
 
-    public PlannerService(PlannerRepository plannerRepository){
+    public PlannerService(PlannerRepository plannerRepository, TripRepository tripRepository) {
         this.plannerRepository = plannerRepository;
+        this.tripRepository = tripRepository;
     }
 
     public List<PlannerDto> getAllPlanners() {
@@ -47,6 +52,21 @@ public class PlannerService {
         return plannerDto;
     }
 
+    public void addPlannerTrip(Long trip, String username) {
+        Optional<Planner> plannerOption = plannerRepository.findByUsername(username);
+        if (plannerOption.isPresent()) {
+           Planner planner = plannerOption.get();
+            Trip tr = tripRepository.findById(trip).orElse(null);
+            assert tr != null;
+            tr.setPlanner(planner);
+            tripRepository.save(tr);
+            planner.addTrip(tr);
+            plannerRepository.save(planner);
+        } else {
+            throw new RecordNotFoundException("Driver not found");
+        }
+    }
+
 
     public void updatePlanner(String username, PlannerDto newPlanner) {
         Optional<Planner> plannerOptional = plannerRepository.findByUsername(username);
@@ -54,7 +74,7 @@ public class PlannerService {
         if (plannerOptional.isPresent()) {
             Planner planner = plannerOptional.get();
             planner.setEmail(newPlanner.getEmail());
-            planner.setPlannerName(newPlanner.getPlannerName());
+            planner.setEmployeeNumber(newPlanner.getEmployeeNumber());
             planner.setUsername(newPlanner.getUsername());
             planner.setPassword(newPlanner.getPassword());
 
@@ -76,7 +96,7 @@ public class PlannerService {
         dto.username = planner.getUsername();
         dto.password = planner.getPassword();
         dto.email = planner.getEmail();
-        dto.plannerName = planner.getPlannerName();
+        dto.employeeNumber = planner.getEmployeeNumber();
 
         return dto;
     }
@@ -88,8 +108,17 @@ public class PlannerService {
         planner.setUsername(plannerDto.getUsername());
         planner.setPassword(plannerDto.getPassword());
         planner.setEmail(plannerDto.getEmail());
-        planner.setPlannerName(plannerDto.getPlannerName());
+        planner.setEmployeeNumber(plannerDto.getEmployeeNumber());
 
         return planner;
+    }
+
+    public void patchOne(String username, Planner planner) {
+        //Todo
+    }
+
+    public Planner getOne(String username) {
+        //Todo
+        return null;
     }
 }
