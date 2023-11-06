@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
-@RequestMapping(value = "/cabforyou/planners")
+@RequestMapping(value = "/planners")
 public class PlannerController {
     
     private PlannerService plannerService;
@@ -24,21 +24,18 @@ public class PlannerController {
         return ResponseEntity.ok(dtos);
     }
 
-    //Is OK
     @GetMapping("/{username}")
     public ResponseEntity<PlannerDto> getPlanner(@PathVariable("username") String username) {
         PlannerDto dto = plannerService.getPlanner(username);
         return ResponseEntity.ok(dto);
     }
 
-    //Is OK
     @PostMapping("")
     public ResponseEntity<PlannerDto> addPlanner(@RequestBody PlannerDto dto) {
         PlannerDto dto1 = plannerService.addPlanner(dto);
         return ResponseEntity.created(null).body(dto1);
     }
 
-    //Is OK
     @PutMapping(value = "/{username}")
     public ResponseEntity<PlannerDto> updatePlanner(@PathVariable("username") String username, @RequestBody PlannerDto dto) {
 
@@ -47,7 +44,6 @@ public class PlannerController {
         return ResponseEntity.noContent().build();
     }
 
-    //Is OK
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deletePlanner(@PathVariable("username") String username) {
         plannerService.deletePlanner(username);
