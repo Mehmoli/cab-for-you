@@ -2,8 +2,11 @@ package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.DriverDto;
 import com.novi.cabforyou.exceptions.UsernameNotFoundException;
+import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.Driver;
+import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.DriverRepository;
+import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,12 @@ import java.util.Optional;
 @Service
 public class DriverService {
 
-    private DriverRepository driverRepository;
+    private final DriverRepository driverRepository;
+    private final TripRepository tripRepository;
 
-    public DriverService(DriverRepository driverRepository) {
+    public DriverService(DriverRepository driverRepository, TripRepository tripRepository) {
         this.driverRepository = driverRepository;
+        this.tripRepository = tripRepository;
     }
 
     public List<DriverDto> getAllDrivers() {
@@ -47,6 +52,20 @@ public class DriverService {
         return driverDto;
     }
 
+    public void addDriverTrip(Long trip, String id) {
+        Optional<Driver> driverOption = driverRepository.findByUsername(id);
+        if (driverOption.isPresent()) {
+            Driver driver = driverOption.get();
+            Trip tr = tripRepository.findById(trip).orElse(null);
+            tr.setDriver(driver);
+            tripRepository.save(tr);
+            driver.addTrip(tr);
+            driverRepository.save(driver);
+        } else {
+            throw new RecordNotFoundException("Driver not found");
+        }
+    }
+
 
     public void updateDriver(String username, DriverDto newDriver) {
         Optional<Driver> driverOptional = driverRepository.findByUsername(username);
@@ -54,9 +73,8 @@ public class DriverService {
         if (driverOptional.isPresent()) {
             Driver driver = driverOptional.get();
             driver.setEmail(newDriver.getEmail());
-//            driver.setAuthorities(newDriver.getAuthorities());
-            driver.setDriverCallSign(newDriver.getDriverCallSign());
-            driver.setDriverPhone(newDriver.getDriverPhone());
+            driver.setAuthorities(newDriver.getAuthorities());
+            driver.setPhoneNumber(newDriver.getPhoneNumber());
             driver.setLicenceNumber(newDriver.getLicenceNumber());
 
             driverRepository.save(driver);
@@ -80,13 +98,12 @@ public class DriverService {
         dto.password = driver.getPassword();
         dto.email = driver.getEmail();
         dto.licenceNumber = driver.getLicenceNumber();
-        dto.driverPhone = driver.getDriverPhone();
+        dto.phoneNumber = driver.getPhoneNumber();
         dto.authorities = driver.getAuthorities();
-        dto.driverCallSign = dto.getDriverCallSign();
 
         return dto;
     }
-    
+
     private Driver transferToDriver(DriverDto driverDto) {
 
         Driver driver = new Driver();
@@ -95,10 +112,18 @@ public class DriverService {
         driver.setPassword(driverDto.getPassword());
         driver.setEmail(driverDto.getEmail());
         driver.setLicenceNumber(driverDto.getLicenceNumber());
-        driver.setDriverPhone(driverDto.getDriverPhone());
+        driver.setPhoneNumber(driverDto.getPhoneNumber());
         driver.setAuthorities(driverDto.getAuthorities());
-        driver.setDriverCallSign(driverDto.getDriverCallSign());
 
         return driver;
+    }
+
+    public void patchOne(String username, Driver driver) {
+        //Todo
+    }
+
+    public Driver getOne(String username) {
+        return new Driver();
+        //Todo
     }
 }
