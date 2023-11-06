@@ -1,18 +1,15 @@
 package com.novi.cabforyou.models;
 
-
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name="cabs")
-public class Cab {
+@Table(name="cars")
+public class Car {
 
     @Id
     @GeneratedValue
-    Long cabId;
+    Long carId;
 
     private String make;
 
@@ -23,23 +20,17 @@ public class Cab {
     private String licensePlate;
 
     @Enumerated(EnumType.STRING)
-    CarType carType = CarType.WAGON; //default value.
+    CarType carType;
 
-    @OneToMany(
-            mappedBy = "cab",
-            fetch = FetchType.LAZY
-    )
-    List<Trip> trips;
+    @OneToOne
+    private Driver driver;
 
-    @ManyToMany
-    List<Driver> drivers = new ArrayList<>();
-
-    public Long getCabId() {
-        return cabId;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setCabId(Long cabId) {
-        this.cabId = cabId;
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
     public String getMake() {
@@ -74,19 +65,19 @@ public class Cab {
         this.licensePlate = licensePlate;
     }
 
-    public CarType getCabType() {
+    public CarType getCarType() {
         return carType;
     }
 
-    public void setCabType(CarType carType) {
+    public void setCarType(CarType carType) {
         this.carType = carType;
     }
 
-    public List<Driver> getDrivers() {
-        return drivers;
+    public Driver getDriver() {
+        return driver;
     }
 
-    public void setDrivers(List<Driver> drivers) {
-        this.drivers = drivers;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 }
