@@ -79,7 +79,6 @@ public class CustomerService {
         dto.username =cu.getUsername();
         dto.address = cu.getAddress();
         dto.email = cu.getEmail();
-        dto.customerPhone = cu.getCustomerPhone();
         dto.phoneNumber = cu.getPhoneNumber();
         dto.firstName = cu.getFirstName();
         dto.lastName = cu.getLastName();
@@ -88,13 +87,12 @@ public class CustomerService {
     }
 
     private Customer transferToCustomer(CustomerDto customerDto) {
-        
+
         Customer customer = new Customer();
 
         customer.setUsername(customerDto.getUsername());
         customer.setAddress(customerDto.getAddress());
         customer.setEmail(customerDto.getEmail());
-        customer.setCustomerPhone(customerDto.getCustomerPhone());
         customer.setPhoneNumber(customerDto.getPhoneNumber());
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
