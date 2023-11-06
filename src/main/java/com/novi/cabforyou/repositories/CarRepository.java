@@ -1,7 +1,7 @@
 package com.novi.cabforyou.repositories;
 
-import com.novi.cabforyou.models.Cab;
+import com.novi.cabforyou.models.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CabRepository extends JpaRepository<Cab, Long> {
+public interface CarRepository extends JpaRepository<Car, Long> {
 }
