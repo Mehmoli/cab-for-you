@@ -4,9 +4,9 @@ import com.novi.cabforyou.models.CarType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-public class CabDto {
+public class CarDto {
 
-    public Long cabId;
+    public Long carId;
 
     public String make;
 
@@ -19,12 +19,12 @@ public class CabDto {
     @Enumerated(EnumType.STRING)
     public CarType carType;
 
-    public Long getCabId() {
-        return cabId;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setCabId(Long cabId) {
-        this.cabId = cabId;
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
     public String getMake() {
@@ -59,11 +59,11 @@ public class CabDto {
         this.licensePlate = licensePlate;
     }
 
-    public CarType getCabType() {
+    public CarType getCarType() {
         return carType;
     }
 
-    public void setCabType(CarType carType) {
+    public void setCarType(CarType carType) {
         this.carType = carType;
     }
 }
