@@ -1,4 +1,4 @@
-package com.novi.cabforyou.models;
+package com.novi.cabforyou.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
