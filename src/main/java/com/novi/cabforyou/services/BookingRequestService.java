@@ -1,33 +1,32 @@
 package com.novi.cabforyou.services;
 
-
 import com.novi.cabforyou.dtos.BookingRequestDto;
-import com.novi.cabforyou.exceptions.BadRequestException;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.BookingRequest;
-import com.novi.cabforyou.repositories.BookingRepository;
+import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.repositories.BookingRequestRepository;
 import com.novi.cabforyou.repositories.TripRepository;
-import org.springframework.stereotype.Service;
 import org.apache.commons.math3.util.Precision;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookingService {
+public class BookingRequestService {
 
-    private final BookingRepository bookingRepository;
+    private final BookingRequestRepository bookingRequestRepository;
     private final TripRepository tripRepository;
 
-    public BookingService(BookingRepository bookingRepository, TripRepository tripRepository) {
-        this.bookingRepository = bookingRepository;
+    public BookingRequestService(BookingRequestRepository bookingRequestRepository, TripRepository tripRepository) {
+        this.bookingRequestRepository = bookingRequestRepository;
         this.tripRepository = tripRepository;
     }
 
     public List<BookingRequestDto> getAllBookings(){
         List<BookingRequestDto> bookingRequestDto = new ArrayList<>();
-        List<BookingRequest> bookingRequests = bookingRepository.findAll();
+        List<BookingRequest> bookingRequests = bookingRequestRepository.findAll();
         for (BookingRequest b: bookingRequests){
             bookingRequestDto.add(transferToDto(b));
         }
@@ -35,7 +34,7 @@ public class BookingService {
     }
 
     public BookingRequestDto getBooking(long id) {
-        Optional<BookingRequest> booking = bookingRepository.findById(id);
+        Optional<BookingRequest> booking = bookingRequestRepository.findById(id);
         if(booking.isPresent()) {
             return transferToDto(booking.get());
         } else {
@@ -44,22 +43,26 @@ public class BookingService {
     }
 
     public BookingRequestDto addBooking(BookingRequestDto bookingRequestDto) {
-        BookingRequest bookingRequest =  transferToBooking(bookingRequestDto);
-        double tripPrice = calculateTripPrice(
-                bookingRequestDto.getNumberOfPeople(),
-                bookingRequestDto.getTripKmPriceMiniBus(),
-                bookingRequestDto.getTripKmPriceCar(),
-                bookingRequestDto.getDistanceInKm()
-        );
+        BookingRequest bookingRequest = transferToBooking(bookingRequestDto);
+
+        CarType selectedCarType = bookingRequestDto.getCarType();
+        double kmPrice= getCorrectKmPrice(selectedCarType);
+        bookingRequestDto.setKmPrice(kmPrice);
+        bookingRequest.setKmPrice(kmPrice);
+
+        double distanceInKM = bookingRequestDto.getDistanceInKm();
+
+        double tripPrice = calculateTripPrice(selectedCarType, distanceInKM);
         bookingRequestDto.setTripPrice(tripPrice);
         bookingRequest.setTripPrice(tripPrice);
-        bookingRepository.save(bookingRequest);
+        bookingRequestRepository.save(bookingRequest);
         return bookingRequestDto;
     }
 
+
     public void updateBooking (Long id, BookingRequestDto newBooking){
-        if(!bookingRepository.existsById(id)) throw new RecordNotFoundException();
-        BookingRequest bookingRequest = bookingRepository.findById(id).get();
+        if(!bookingRequestRepository.existsById(id)) throw new RecordNotFoundException();
+        BookingRequest bookingRequest = bookingRequestRepository.findById(id).get();
 
         bookingRequest.setTripDate(newBooking.getTripDate());
         bookingRequest.setTripTime(newBooking.getTripTime());
@@ -67,19 +70,18 @@ public class BookingService {
         bookingRequest.setToAddress(newBooking.getToAddress());
         bookingRequest.setNumberOfPeople(newBooking.getNumberOfPeople());
         bookingRequest.setDistanceInKm(newBooking.getDistanceInKm());
-        bookingRequest.setTripKmPriceMiniBus(newBooking.getTripKmPriceMiniBus());
-        bookingRequest.setTripKmPriceCar(newBooking.getTripKmPriceCar());
+        bookingRequest.setKmPrice(newBooking.getKmPrice());
         bookingRequest.setTripPrice(newBooking.getTripPrice());
         bookingRequest.setCarType(newBooking.getCarType());
         bookingRequest.setBookingStatus(newBooking.getBookingStatus());
-        bookingRepository.save(bookingRequest);
+        bookingRequestRepository.save(bookingRequest);
     }
 
     public BookingRequest patchBooking(Long id, BookingRequest bookingRequest) {
-        if (!bookingRepository.existsById(id)) {
+        if (!bookingRequestRepository.existsById(id)) {
             throw new RecordNotFoundException("BookingRequest not found");}
 
-        BookingRequest patchBookingRequest = bookingRepository.findById(id).orElse(null);
+        BookingRequest patchBookingRequest = bookingRequestRepository.findById(id).orElse(null);
 
         if(bookingRequest.getTrip() != null){
             patchBookingRequest.setTrip(tripRepository.getById(bookingRequest.getTrip().getTripId()));
@@ -115,12 +117,12 @@ public class BookingService {
             patchBookingRequest.setBookingStatus(bookingRequest.getBookingStatus());
         }
 
-        bookingRepository.save(patchBookingRequest);
+        bookingRequestRepository.save(patchBookingRequest);
         return patchBookingRequest;
     }
 
     public void deleteBooking (long id){
-        bookingRepository.deleteById(id);
+        bookingRequestRepository.deleteById(id);
     }
 
     // Is van client naar server
@@ -135,8 +137,7 @@ public class BookingService {
         bookingRequest.setToAddress(dto.getToAddress());
         bookingRequest.setNumberOfPeople(dto.getNumberOfPeople());
         bookingRequest.setDistanceInKm(dto.getDistanceInKm());
-        bookingRequest.setTripKmPriceMiniBus(dto.getTripKmPriceMiniBus());
-        bookingRequest.setTripKmPriceCar(dto.getTripKmPriceCar());
+        bookingRequest.setKmPrice(dto.getKmPrice());
         bookingRequest.setTripPrice(dto.getTripPrice());
         bookingRequest.setCarType(dto.getCarType());
         bookingRequest.setBookingStatus(dto.getBookingStatus());
@@ -156,8 +157,7 @@ public class BookingService {
         dto.toAddress= bookingRequest.getToAddress();
         dto.numberOfPeople = bookingRequest.getNumberOfPeople();
         dto.distanceInKm = bookingRequest.getDistanceInKm();
-        dto.tripKmPriceMiniBus = bookingRequest.getTripKmPriceMiniBus();
-        dto.tripKmPriceCar = bookingRequest.getTripKmPriceCar();
+        dto.kmPrice = bookingRequest.getKmPrice();
         dto.tripPrice = bookingRequest.getTripPrice();
         dto.carType = bookingRequest.getCarType();
         dto.bookingStatus = bookingRequest.getBookingStatus();
@@ -165,14 +165,25 @@ public class BookingService {
         return dto;
     }
 
-    public double calculateTripPrice(int numberOfPeople, double tripKmPriceMiniBus, double tripKmPriceCar, double distanceInKm) {
-        if (numberOfPeople > 8) {
-            throw new BadRequestException("We have no cars for more than 8 passengers");
-        } else if (numberOfPeople > 4) {
-            return Precision.round(tripKmPriceMiniBus * distanceInKm, 2);
-        } else {
-            return Precision.round(tripKmPriceCar * distanceInKm, 2);
-        }
+    public double getCorrectKmPrice(CarType carType){
+       double basekmPrice = carType.getPrice();
+       double newkmPrice = basekmPrice;
+
+       return newkmPrice;
     }
 
+    public double calculateTripPrice(CarType carType, double distanceInKM) {
+
+        double basePrice = carType.getPrice();
+
+        double tripPrice = Precision.round((basePrice * distanceInKM),2);
+
+        return tripPrice;
+    }
+
+
+    public BookingRequest getOne(Long bookingId) {
+     // Todo
+        return null;
+    }
 }
