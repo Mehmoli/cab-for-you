@@ -1,6 +1,4 @@
-package com.novi.cabforyou.models.enums;
-
-import com.fasterxml.jackson.annotation.JsonValue;
+package com.novi.cabforyou.models;
 
 public enum CarType {
     SEDAN("SEDAN", 2.65, 4),
@@ -17,14 +15,6 @@ public enum CarType {
         this.kmPrice = kmPrice;
         this.seatsAvailable = seatsAvailable;
     }
-
-//    public int seatsAvailable() {
-//        return switch (this) {
-//            case SEDAN, WAGON -> 4;
-//            case MINIBUS -> 6;
-//            case BIGBUS -> 8;
-//        };
-//    }
 
     public double getPrice() {
         return kmPrice;
