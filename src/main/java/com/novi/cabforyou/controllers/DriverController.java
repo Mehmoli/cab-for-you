@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/cabforyou/drivers")
+@RequestMapping(value = "/drivers")
 public class DriverController {
 
     private DriverService driverService;
@@ -17,7 +17,6 @@ public class DriverController {
         this.driverService = driverService;
     }
 
-    //Is OK
     @GetMapping("")
     public ResponseEntity<List<DriverDto>> getAllDrivers() {
 
@@ -26,21 +25,18 @@ public class DriverController {
         return ResponseEntity.ok(dtos);
     }
 
-    //Is OK
     @GetMapping("/{username}")
     public ResponseEntity<DriverDto> getDriver(@PathVariable("username") String username) {
         DriverDto dto = driverService.getDriver(username);
         return ResponseEntity.ok(dto);
     }
 
-    //Is OK
     @PostMapping("")
     public ResponseEntity<DriverDto> addDriver(@RequestBody DriverDto dto) {
         DriverDto dto1 = driverService.addDriver(dto);
         return ResponseEntity.created(null).body(dto1);
     }
 
-    //Is OK
     @PutMapping(value = "/{username}")
     public ResponseEntity<DriverDto> updateDriver(@PathVariable("username") String username, @RequestBody DriverDto dto) {
 
@@ -49,7 +45,6 @@ public class DriverController {
         return ResponseEntity.noContent().build();
     }
 
-    //Is OK
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteDriver(@PathVariable("username") String username) {
         driverService.deleteDriver(username);
