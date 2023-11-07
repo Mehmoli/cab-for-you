@@ -2,12 +2,14 @@ package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.Car;
+import com.novi.cabforyou.models.CarType;
 import com.novi.cabforyou.repositories.CarRepository;
 import com.novi.cabforyou.dtos.CarDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,7 +24,7 @@ public class CarService {
     public List<CarDto> getAllCars() {
         List<CarDto> carDto = new ArrayList<>();
         List<Car> cars = carRepository.findAll();
-        for (Car c: cars){
+        for (Car c : cars) {
             carDto.add(transferToCarDto(c));
         }
         return carDto;
@@ -31,7 +33,7 @@ public class CarService {
 
     public CarDto getCar(long id) {
         Optional<Car> car = carRepository.findById(id);
-        if(!car.isPresent()){
+        if (!car.isPresent()) {
             throw new RecordNotFoundException();
         } else {
             return transferToCarDto(car.get());
@@ -45,9 +47,8 @@ public class CarService {
 
     }
 
-
     public void updateCar(long id, CarDto newCar) {
-        if(!carRepository.existsById(id)) throw new RecordNotFoundException();
+        if (!carRepository.existsById(id)) throw new RecordNotFoundException();
         Car car = carRepository.findById(id).get();
         car.setMake(newCar.getMake());
         car.setModel(newCar.getModel());
@@ -87,5 +88,48 @@ public class CarService {
         return dto;
     }
 
+    public CarDto partiallyUpdateCar(long id, Map<String, Object> carUpdates) {
+        if (!carRepository.existsById(id)) {
+            throw new RecordNotFoundException();
+        }
+
+        Car car = carRepository.findById(id).get();
+
+        for (Map.Entry<String, Object> entry : carUpdates.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if ("carType".equals(key)) {
+                if (value instanceof String) {
+                    car.setCarType(CarType.valueOf((String) value));
+                } else {
+                    throw new IllegalArgumentException("car type must be a string.");
+                }
+            } else {
+                switch (key) {
+                    case "make":
+                        car.setMake((String) value);
+                        break;
+                    case "model":
+                        car.setModel((String) value);
+                        break;
+                    case "availableSeats":
+                        car.setAvailableSeats((int) value);
+                        break;
+                    case "licensePlate":
+                        car.setLicensePlate((String) value);
+                        break;
+                    case "carType":
+                        car.setCarType(CarType.valueOf((String) value));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown field: " + key);
+                }
+            }
+        }
+        carRepository.save(car);
+
+        return transferToCarDto(car);
+    }
 
 }

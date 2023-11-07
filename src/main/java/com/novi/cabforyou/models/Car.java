@@ -2,9 +2,8 @@ package com.novi.cabforyou.models;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name="cars")
+@Table(name = "cars")
 public class Car {
 
     @Id
@@ -20,9 +19,8 @@ public class Car {
     private String licensePlate;
 
     @Enumerated(EnumType.STRING)
-    CarType carType;
-
-    @OneToOne
+    private CarType carType;
+    @OneToOne(mappedBy = "car")
     private Driver driver;
 
     public Long getCarId() {
@@ -80,4 +78,5 @@ public class Car {
     public void setDriver(Driver driver) {
         this.driver = driver;
     }
+
 }
