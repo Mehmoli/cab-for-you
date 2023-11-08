@@ -3,16 +3,13 @@ package com.novi.cabforyou.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="customers")
-public class Customer extends User{
-
+@Table(name = "customers")
+public class Customer extends User {
     private String address;
-
     @OneToMany(
             targetEntity = BookingRequest.class,
             mappedBy = "customer",
@@ -20,12 +17,12 @@ public class Customer extends User{
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private List<BookingRequest> bookingRequests = new ArrayList<>();
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "feedback_id", referencedColumnName = "feedbackId")
     private Feedback feedbacks;
 
-    public Customer() {}
+    public Customer() {
+    }
 
     public Customer(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String address, List<BookingRequest> bookingRequests, Feedback feedbacks) {
         super(username, password, authorities, email, firstName, lastName, phoneNumber);
