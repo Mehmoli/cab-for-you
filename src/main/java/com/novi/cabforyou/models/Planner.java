@@ -1,9 +1,8 @@
 package com.novi.cabforyou.models;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -11,33 +10,24 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="planners")
+@Table(name = "planners")
 public class Planner extends User {
     private String employeeNumber;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "planner")
-    List<Trip> trips;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "planner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "planner")
     List<BookingRequest> bookingRequests;
 
     public Planner() {
     }
 
-
-
-    public Planner(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String employeeNumber, List<Trip> trips, List<BookingRequest> bookingRequests) {
+    public Planner(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String employeeNumber, List<BookingRequest> bookingRequests) {
         super(username, password, authorities, email, firstName, lastName, phoneNumber);
         this.employeeNumber = employeeNumber;
-        this.trips = trips;
         this.bookingRequests = bookingRequests;
     }
 
-    public Planner(String employeeNumber, List<Trip> trips, List<BookingRequest> bookingRequests) {
+    public Planner(String employeeNumber, List<BookingRequest> bookingRequests) {
         this.employeeNumber = employeeNumber;
-        this.trips = trips;
         this.bookingRequests = bookingRequests;
     }
 
@@ -49,14 +39,6 @@ public class Planner extends User {
         this.employeeNumber = employeeNumber;
     }
 
-    public List<Trip> getTrips() {
-        return trips;
-    }
-
-    public void setTrips(List<Trip> trips) {
-        this.trips = trips;
-    }
-
     public List<BookingRequest> getBookingRequests() {
         return bookingRequests;
     }
@@ -65,11 +47,4 @@ public class Planner extends User {
         this.bookingRequests = bookingRequests;
     }
 
-    public void addTrip(Trip tr) {
-        //Todo
-    }
-
-    public void deleteTrip(Trip trip) {
-        //Todo
-    }
 }

@@ -2,14 +2,15 @@ package com.novi.cabforyou.controllers;
 
 import com.novi.cabforyou.dtos.PlannerDto;
 import com.novi.cabforyou.services.PlannerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping(value = "/planners")
 public class PlannerController {
-    
     private PlannerService plannerService;
 
     public PlannerController(PlannerService plannerService) {
@@ -18,9 +19,7 @@ public class PlannerController {
 
     @GetMapping("")
     public ResponseEntity<List<PlannerDto>> getAllPlanners() {
-
         List<PlannerDto> dtos = plannerService.getAllPlanners();
-
         return ResponseEntity.ok(dtos);
     }
 
@@ -36,12 +35,10 @@ public class PlannerController {
         return ResponseEntity.created(null).body(dto1);
     }
 
-    @PutMapping(value = "/{username}")
-    public ResponseEntity<PlannerDto> updatePlanner(@PathVariable("username") String username, @RequestBody PlannerDto dto) {
-
-        plannerService.updatePlanner(username, dto);
-
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{username}")
+    public ResponseEntity<PlannerDto> updatePlanner(@PathVariable("username") String username, @RequestBody PlannerDto updatedPlannerDto) {
+        PlannerDto updatedDto = plannerService.updatePlanner(username, updatedPlannerDto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
     }
 
     @DeleteMapping(value = "/{username}")
@@ -49,4 +46,11 @@ public class PlannerController {
         plannerService.deletePlanner(username);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{username}")
+    public ResponseEntity<PlannerDto> patchPlanner(@PathVariable("username") String username, @RequestBody PlannerDto updatedPlannerDto) {
+        PlannerDto updatedDto = plannerService.patchPlanner(username, updatedPlannerDto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+
 }

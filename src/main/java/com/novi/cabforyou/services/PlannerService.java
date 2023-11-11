@@ -1,10 +1,8 @@
 package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.PlannerDto;
-import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Planner;
-import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.PlannerRepository;
 import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
@@ -28,7 +26,7 @@ public class PlannerService {
     public List<PlannerDto> getAllPlanners() {
         List<PlannerDto> plannerDto = new ArrayList<>();
         List<Planner> planners = plannerRepository.findAll();
-        for (Planner dr: planners){
+        for (Planner dr : planners) {
             plannerDto.add(transferToPlannerDto(dr));
         }
         return plannerDto;
@@ -52,33 +50,19 @@ public class PlannerService {
         return plannerDto;
     }
 
-    public void addPlannerTrip(Long trip, String username) {
-        Optional<Planner> plannerOption = plannerRepository.findByUsername(username);
-        if (plannerOption.isPresent()) {
-           Planner planner = plannerOption.get();
-            Trip tr = tripRepository.findById(trip).orElse(null);
-            assert tr != null;
-            tr.setPlanner(planner);
-            tripRepository.save(tr);
-            planner.addTrip(tr);
-            plannerRepository.save(planner);
-        } else {
-            throw new RecordNotFoundException("Driver not found");
-        }
-    }
+    @Transactional
+    public PlannerDto updatePlanner(String username, PlannerDto updatedPlannerDto) {
+        Optional<Planner> optionalPlanner = plannerRepository.findByUsername(username);
 
+        if (optionalPlanner.isPresent()) {
+            Planner existingPlanner = optionalPlanner.get();
 
-    public void updatePlanner(String username, PlannerDto newPlanner) {
-        Optional<Planner> plannerOptional = plannerRepository.findByUsername(username);
+            existingPlanner.setPassword(updatedPlannerDto.getPassword());
+            existingPlanner.setEmail(updatedPlannerDto.getEmail());
+            existingPlanner.setEmployeeNumber(updatedPlannerDto.getEmployeeNumber());
+            existingPlanner.setPhoneNumber(updatedPlannerDto.getPhoneNumber());
 
-        if (plannerOptional.isPresent()) {
-            Planner planner = plannerOptional.get();
-            planner.setEmail(newPlanner.getEmail());
-            planner.setEmployeeNumber(newPlanner.getEmployeeNumber());
-            planner.setUsername(newPlanner.getUsername());
-            planner.setPassword(newPlanner.getPassword());
-
-            plannerRepository.save(planner);
+            return transferToPlannerDto(existingPlanner);
         } else {
             throw new UsernameNotFoundException(username);
         }
@@ -89,6 +73,30 @@ public class PlannerService {
         plannerRepository.deleteByUsername(username);
     }
 
+    @Transactional
+    public PlannerDto patchPlanner(String username, PlannerDto updatedPlannerDto) {
+        Optional<Planner> optionalPlanner = plannerRepository.findByUsername(username);
+        if (optionalPlanner.isPresent()) {
+            Planner existingPlanner = optionalPlanner.get();
+
+            if (updatedPlannerDto.getEmail() != null) {
+                existingPlanner.setEmail(updatedPlannerDto.getEmail());
+            }
+            if (updatedPlannerDto.getEmployeeNumber() != null) {
+                existingPlanner.setEmployeeNumber(updatedPlannerDto.getEmployeeNumber());
+            }
+            if (updatedPlannerDto.getPhoneNumber() != null) {
+                existingPlanner.setPhoneNumber(updatedPlannerDto.getPhoneNumber());
+            }
+
+            plannerRepository.save(existingPlanner);
+
+            return transferToPlannerDto(existingPlanner);
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
     private PlannerDto transferToPlannerDto(Planner planner) {
 
         var dto = new PlannerDto();
@@ -97,6 +105,8 @@ public class PlannerService {
         dto.password = planner.getPassword();
         dto.email = planner.getEmail();
         dto.employeeNumber = planner.getEmployeeNumber();
+        dto.phoneNumber = planner.getPhoneNumber();
+        dto.authorities = planner.getAuthorities();
 
         return dto;
     }
@@ -109,16 +119,10 @@ public class PlannerService {
         planner.setPassword(plannerDto.getPassword());
         planner.setEmail(plannerDto.getEmail());
         planner.setEmployeeNumber(plannerDto.getEmployeeNumber());
+        planner.setPhoneNumber(plannerDto.getPhoneNumber());
+        planner.setAuthorities(plannerDto.getAuthorities());
 
         return planner;
     }
 
-    public void patchOne(String username, Planner planner) {
-        //Todo
-    }
-
-    public Planner getOne(String username) {
-        //Todo
-        return null;
-    }
 }
