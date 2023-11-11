@@ -11,15 +11,16 @@ import java.util.Set;
 public class Driver extends User {
 
     private String licenceNumber;
-    @OneToOne(mappedBy = "driver")
-    Car car;
+    @OneToOne
+    @JoinColumn(name="car_id")
+    private Car car;
 
     @OneToMany(
             mappedBy = "driver",
             fetch = FetchType.LAZY
     )
     @JsonIgnore
-    List<Trip> trips;
+    private List<Trip> trips;
 
     public Driver() {}
 
@@ -58,11 +59,8 @@ public class Driver extends User {
         this.trips = trips;
     }
 
-    public void addTrip(Trip tr) {
-        //Todo
-    }
+    public void addTrip(Trip trip) {this.trips.add(trip);}
 
-    public void deleteTrip(Trip trip) {
-        //Todo
-    }
+    public void deleteTrip(Trip trip) {this.trips.remove(trip);}
+
 }

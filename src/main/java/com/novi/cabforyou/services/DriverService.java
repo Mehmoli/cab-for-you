@@ -1,8 +1,8 @@
 package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.DriverDto;
+import com.novi.cabforyou.dtos.TripDto;
 import com.novi.cabforyou.exceptions.UsernameNotFoundException;
-import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.Driver;
 import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.DriverRepository;
@@ -28,7 +28,7 @@ public class DriverService {
     public List<DriverDto> getAllDrivers() {
         List<DriverDto> driverDto = new ArrayList<>();
         List<Driver> drivers = driverRepository.findAll();
-        for (Driver dr: drivers){
+        for (Driver dr : drivers) {
             driverDto.add(transferToDriverDto(dr));
         }
         return driverDto;
@@ -52,42 +52,68 @@ public class DriverService {
         return driverDto;
     }
 
-    public void addDriverTrip(Long trip, String id) {
-        Optional<Driver> driverOption = driverRepository.findByUsername(id);
-        if (driverOption.isPresent()) {
-            Driver driver = driverOption.get();
-            Trip tr = tripRepository.findById(trip).orElse(null);
-            tr.setDriver(driver);
-            tripRepository.save(tr);
-            driver.addTrip(tr);
-            driverRepository.save(driver);
-        } else {
-            throw new RecordNotFoundException("Driver not found");
-        }
-    }
+    @Transactional
+    public DriverDto updateDriver(String username, DriverDto updatedDriverDto) {
+        Optional<Driver> optionalDriver = driverRepository.findByUsername(username);
+        if (optionalDriver.isPresent()) {
+            Driver existingDriver = optionalDriver.get();
 
+            existingDriver.setPassword(updatedDriverDto.getPassword());
+            existingDriver.setEmail(updatedDriverDto.getEmail());
+            existingDriver.setLicenceNumber(updatedDriverDto.getLicenceNumber());
+            existingDriver.setPhoneNumber(updatedDriverDto.getPhoneNumber());
 
-    public void updateDriver(String username, DriverDto newDriver) {
-        Optional<Driver> driverOptional = driverRepository.findByUsername(username);
+            driverRepository.save(existingDriver);
 
-        if (driverOptional.isPresent()) {
-            Driver driver = driverOptional.get();
-            driver.setEmail(newDriver.getEmail());
-            driver.setAuthorities(newDriver.getAuthorities());
-            driver.setPhoneNumber(newDriver.getPhoneNumber());
-            driver.setLicenceNumber(newDriver.getLicenceNumber());
-
-            driverRepository.save(driver);
+            return transferToDriverDto(existingDriver);
         } else {
             throw new UsernameNotFoundException(username);
         }
     }
 
-
-
     @Transactional
     public void deleteDriver(String username) {
         driverRepository.deleteByUsername(username);
+    }
+
+    @Transactional
+    public DriverDto patchDriver(String username, DriverDto updatedDriverDto) {
+        Optional<Driver> optionalDriver = driverRepository.findByUsername(username);
+        if (optionalDriver.isPresent()) {
+
+            Driver existingDriver = optionalDriver.get();
+
+            if (updatedDriverDto.getEmail() != null) {
+                existingDriver.setEmail(updatedDriverDto.getEmail());
+            }
+            if (updatedDriverDto.getLicenceNumber() != null) {
+                existingDriver.setLicenceNumber(updatedDriverDto.getLicenceNumber());
+            }
+            if (updatedDriverDto.getPhoneNumber() != null) {
+                existingDriver.setPhoneNumber(updatedDriverDto.getPhoneNumber());
+            }
+
+            driverRepository.save(existingDriver);
+
+            return transferToDriverDto(existingDriver);
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
+    //DRIVERS TRIPS HANDLING
+    public List<Trip> getDriverTrips(String username) {
+        Optional<Driver> optionalDriver = driverRepository.findByUsername(username);
+        if (optionalDriver.isPresent()) {
+            Driver driver = optionalDriver.get();
+            return driver.getTrips();
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+    public List<TripDto> getDriverTripsDto(String username) {
+        List<Trip> trips = getDriverTrips(username);
+        return trips.stream().map(TripDto::transferToTripDto).toList();
     }
 
     private DriverDto transferToDriverDto(Driver driver) {
@@ -118,12 +144,4 @@ public class DriverService {
         return driver;
     }
 
-    public void patchOne(String username, Driver driver) {
-        //Todo
-    }
-
-    public Driver getOne(String username) {
-        return new Driver();
-        //Todo
-    }
 }
