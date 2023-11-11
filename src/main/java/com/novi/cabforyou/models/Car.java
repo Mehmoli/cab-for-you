@@ -1,13 +1,9 @@
 package com.novi.cabforyou.models;
 
-
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name="cars")
+@Table(name = "cars")
 public class Car {
 
     @Id
@@ -23,11 +19,9 @@ public class Car {
     private String licensePlate;
 
     @Enumerated(EnumType.STRING)
-    CarType carType;
-
-
-    @ManyToMany
-    List<Driver> drivers = new ArrayList<>();
+    private CarType carType;
+    @OneToOne(mappedBy = "car")
+    private Driver driver;
 
     public Long getCarId() {
         return carId;
@@ -77,11 +71,12 @@ public class Car {
         this.carType = carType;
     }
 
-    public List<Driver> getDrivers() {
-        return drivers;
+    public Driver getDriver() {
+        return driver;
     }
 
-    public void setDrivers(List<Driver> drivers) {
-        this.drivers = drivers;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
+
 }

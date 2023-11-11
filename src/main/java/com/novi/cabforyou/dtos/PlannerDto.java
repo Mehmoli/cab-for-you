@@ -11,20 +11,11 @@ public class PlannerDto {
     public String password;
 
     public String email;
-    public String plannerName;
+
+    public String phoneNumber;
+    public String employeeNumber;
 
     public Set<Authority> authorities;
-    public PlannerDto() {
-    }
-
-    public PlannerDto(String username, String password, String email, String plannerName, Set<Authority> authorities) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.plannerName = plannerName;
-        this.authorities = authorities;
-    }
-
 
     public String getUsername() {
         return username;
@@ -50,12 +41,20 @@ public class PlannerDto {
         this.email = email;
     }
 
-    public String getPlannerName() {
-        return plannerName;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPlannerName(String plannerName) {
-        this.plannerName = plannerName;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public void setEmployeeNumber(String employeeNumber) {
+        this.employeeNumber = employeeNumber;
     }
 
     public Set<Authority> getAuthorities() {
@@ -65,4 +64,5 @@ public class PlannerDto {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
+
 }

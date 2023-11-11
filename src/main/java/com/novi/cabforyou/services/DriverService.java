@@ -1,9 +1,12 @@
 package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.DriverDto;
+import com.novi.cabforyou.dtos.TripDto;
 import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Driver;
+import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.DriverRepository;
+import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +17,18 @@ import java.util.Optional;
 @Service
 public class DriverService {
 
-    private DriverRepository driverRepository;
+    private final DriverRepository driverRepository;
+    private final TripRepository tripRepository;
 
-    public DriverService(DriverRepository driverRepository) {
+    public DriverService(DriverRepository driverRepository, TripRepository tripRepository) {
         this.driverRepository = driverRepository;
+        this.tripRepository = tripRepository;
     }
 
     public List<DriverDto> getAllDrivers() {
         List<DriverDto> driverDto = new ArrayList<>();
         List<Driver> drivers = driverRepository.findAll();
-        for (Driver dr: drivers){
+        for (Driver dr : drivers) {
             driverDto.add(transferToDriverDto(dr));
         }
         return driverDto;
@@ -47,29 +52,69 @@ public class DriverService {
         return driverDto;
     }
 
+    @Transactional
+    public DriverDto updateDriver(String username, DriverDto updatedDriverDto) {
+        Optional<Driver> optionalDriver = driverRepository.findByUsername(username);
+        if (optionalDriver.isPresent()) {
+            Driver existingDriver = optionalDriver.get();
 
-    public void updateDriver(String username, DriverDto newDriver) {
-        Optional<Driver> driverOptional = driverRepository.findByUsername(username);
+            existingDriver.setPassword(updatedDriverDto.getPassword());
+            existingDriver.setEmail(updatedDriverDto.getEmail());
+            existingDriver.setLicenceNumber(updatedDriverDto.getLicenceNumber());
+            existingDriver.setPhoneNumber(updatedDriverDto.getPhoneNumber());
 
-        if (driverOptional.isPresent()) {
-            Driver driver = driverOptional.get();
-            driver.setEmail(newDriver.getEmail());
-//            driver.setAuthorities(newDriver.getAuthorities());
-            driver.setDriverCallSign(newDriver.getDriverCallSign());
-            driver.setDriverPhone(newDriver.getDriverPhone());
-            driver.setLicenceNumber(newDriver.getLicenceNumber());
+            driverRepository.save(existingDriver);
 
-            driverRepository.save(driver);
+            return transferToDriverDto(existingDriver);
         } else {
             throw new UsernameNotFoundException(username);
         }
     }
 
-
-
     @Transactional
     public void deleteDriver(String username) {
         driverRepository.deleteByUsername(username);
+    }
+
+    @Transactional
+    public DriverDto patchDriver(String username, DriverDto updatedDriverDto) {
+        Optional<Driver> optionalDriver = driverRepository.findByUsername(username);
+        if (optionalDriver.isPresent()) {
+
+            Driver existingDriver = optionalDriver.get();
+
+            if (updatedDriverDto.getEmail() != null) {
+                existingDriver.setEmail(updatedDriverDto.getEmail());
+            }
+            if (updatedDriverDto.getLicenceNumber() != null) {
+                existingDriver.setLicenceNumber(updatedDriverDto.getLicenceNumber());
+            }
+            if (updatedDriverDto.getPhoneNumber() != null) {
+                existingDriver.setPhoneNumber(updatedDriverDto.getPhoneNumber());
+            }
+
+            driverRepository.save(existingDriver);
+
+            return transferToDriverDto(existingDriver);
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
+    //DRIVERS TRIPS HANDLING
+    public List<Trip> getDriverTrips(String username) {
+        Optional<Driver> optionalDriver = driverRepository.findByUsername(username);
+        if (optionalDriver.isPresent()) {
+            Driver driver = optionalDriver.get();
+            return driver.getTrips();
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
+    public List<TripDto> getDriverTripsDto(String username) {
+        List<Trip> trips = getDriverTrips(username);
+        return trips.stream().map(TripDto::transferToTripDto).toList();
     }
 
     private DriverDto transferToDriverDto(Driver driver) {
@@ -80,13 +125,12 @@ public class DriverService {
         dto.password = driver.getPassword();
         dto.email = driver.getEmail();
         dto.licenceNumber = driver.getLicenceNumber();
-        dto.driverPhone = driver.getDriverPhone();
+        dto.phoneNumber = driver.getPhoneNumber();
         dto.authorities = driver.getAuthorities();
-        dto.driverCallSign = dto.getDriverCallSign();
 
         return dto;
     }
-    
+
     private Driver transferToDriver(DriverDto driverDto) {
 
         Driver driver = new Driver();
@@ -95,10 +139,10 @@ public class DriverService {
         driver.setPassword(driverDto.getPassword());
         driver.setEmail(driverDto.getEmail());
         driver.setLicenceNumber(driverDto.getLicenceNumber());
-        driver.setDriverPhone(driverDto.getDriverPhone());
+        driver.setPhoneNumber(driverDto.getPhoneNumber());
         driver.setAuthorities(driverDto.getAuthorities());
-        driver.setDriverCallSign(driverDto.getDriverCallSign());
 
         return driver;
     }
+
 }

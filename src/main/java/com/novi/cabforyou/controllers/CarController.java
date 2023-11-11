@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/cabforyou/cars")
+@RequestMapping("/cars")
 public class CarController {
 
     private CarService carService;
@@ -17,7 +18,6 @@ public class CarController {
         this.carService = carService;
     }
 
-    // Is OK
     @GetMapping("")
     public ResponseEntity<List<CarDto>> getAllCars() {
 
@@ -26,7 +26,6 @@ public class CarController {
         return ResponseEntity.ok(dtos);
     }
 
-    // Is OK
     @GetMapping("/{id}")
     public ResponseEntity<CarDto> getCar(@PathVariable("id") long id) {
 
@@ -35,14 +34,12 @@ public class CarController {
         return ResponseEntity.ok(dto);
     }
 
-    //Is OK
     @PostMapping("")
     public ResponseEntity<CarDto> addCar(@RequestBody CarDto dto) {
         CarDto dto1 = carService.addCar(dto);
         return ResponseEntity.created(null).body(dto1);
     }
 
-    //Is OK
     @PutMapping(value = "/{id}")
     public ResponseEntity<CarDto> updateCar(@PathVariable("id") long id, @RequestBody CarDto dto) {
 
@@ -51,11 +48,16 @@ public class CarController {
         return ResponseEntity.noContent().build();
     }
 
-    //Is OK
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") long id) {
         carService.deleteCar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CarDto> partiallyUpdateCar(@PathVariable("id") long id, @RequestBody Map<String, Object> carUpdates) {
+        CarDto updatedCar = carService.partiallyUpdateCar(id, carUpdates);
+        return ResponseEntity.ok(updatedCar);
     }
 
 }

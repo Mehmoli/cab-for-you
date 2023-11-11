@@ -12,10 +12,10 @@ import java.util.Optional;
 
 @Service
 public class FeedbackService {
-    private FeedbackRepository feedbackRepository;
+    private final FeedbackRepository feedbackRepository;
 
-    public FeedbackService(FeedbackRepository feedbackRepository){
-        this.feedbackRepository =feedbackRepository;
+    public FeedbackService(FeedbackRepository feedbackRepository) {
+        this.feedbackRepository = feedbackRepository;
     }
 
 
@@ -23,35 +23,35 @@ public class FeedbackService {
 
         List<FeedbackDto> feedbackDto = new ArrayList<>();
         List<Feedback> feedbacks = feedbackRepository.findAll();
-        for (Feedback f: feedbacks){
+        for (Feedback f : feedbacks) {
             feedbackDto.add(transferToFeedbackDto(f));
         }
         return feedbackDto;
-        
+
     }
 
     public FeedbackDto getFeedback(Long id) {
-        
+
         Optional<Feedback> feedback = feedbackRepository.findById(id);
-        if(!feedback.isPresent()){
-            throw new RecordNotFoundException();
-        } else {
+        if (feedback.isPresent()) {
             return transferToFeedbackDto(feedback.get());
+        } else {
+            throw new RecordNotFoundException();
         }
-        
+
     }
 
     public FeedbackDto addFeedback(FeedbackDto feedbackDto) {
-        
+
         Feedback feedback = transferToFeedback(feedbackDto);
         feedbackRepository.save(feedback);
         return feedbackDto;
-        
+
     }
 
     public void updateFeedback(long id, FeedbackDto newFeedback) {
 
-        if(!feedbackRepository.existsById(id)) throw new RecordNotFoundException();
+        if (!feedbackRepository.existsById(id)) throw new RecordNotFoundException();
 
         Feedback feedback = feedbackRepository.findById(id).get();
 
@@ -67,9 +67,9 @@ public class FeedbackService {
         feedbackRepository.deleteById(id);
     }
 
-    private Feedback transferToFeedback(FeedbackDto feedbackDto){
+    private Feedback transferToFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = new Feedback();
-        feedback.setFeedbackId(feedbackDto.feedbackId);
+        feedback.setFeedbackId(feedbackDto.getFeedbackId());
         feedback.setFeedback(feedbackDto.getFeedback());
         feedback.setRating(feedbackDto.getRating());
         feedback.setSubmitDate(feedbackDto.getSubmitDate());
@@ -87,7 +87,7 @@ public class FeedbackService {
         dto.feedback = feedback.getFeedback();
         dto.rating = feedback.getRating();
         dto.submitDate = feedback.getSubmitDate();
-        dto.feedbackOfCustomer =feedback.getFeedbackOfCustomer();
+        dto.feedbackOfCustomer = feedback.getFeedbackOfCustomer();
 
         return dto;
 

@@ -13,9 +13,7 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-
     private CustomerRepository customerRepository;
-
     public CustomerService(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
     }
@@ -47,8 +45,6 @@ public class CustomerService {
         return customerDto;
     }
 
-
-
     public void updateCustomer(String username, CustomerDto newCustomer) {
         Optional<Customer> customerOptional = customerRepository.findByUsername(username);
 
@@ -66,38 +62,62 @@ public class CustomerService {
     }
 
     @Transactional
+    public CustomerDto patchOneCustomer(String username, CustomerDto updatedCustomerDto) {
+        Optional<Customer> optionalCustomer = customerRepository.findByUsername(username);
+        if (optionalCustomer.isPresent()) {
+            Customer existingCustomer = optionalCustomer.get();
+
+            if (updatedCustomerDto.getEmail() != null) {
+                existingCustomer.setEmail(updatedCustomerDto.getEmail());
+            }
+            if (updatedCustomerDto.getAddress() != null) {
+                existingCustomer.setAddress(updatedCustomerDto.getAddress());
+            }
+            if (updatedCustomerDto.getPhoneNumber() != null) {
+                existingCustomer.setPhoneNumber(updatedCustomerDto.getPhoneNumber());
+            }
+
+            customerRepository.save(existingCustomer);
+
+            return transferToCustomerDto(existingCustomer);
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
+    @Transactional
     public void deleteCustomer(String username) {
         customerRepository.deleteByUsername(username);
     }
-
-
 
     private CustomerDto transferToCustomerDto(Customer cu) {
 
         var dto = new CustomerDto();
 
         dto.username =cu.getUsername();
-        dto.address = cu.getAddress();
-        dto.email = cu.getEmail();
-        dto.customerPhone = cu.getCustomerPhone();
-        dto.phoneNumber = cu.getPhoneNumber();
+        dto.password = cu.getPassword();
         dto.firstName = cu.getFirstName();
         dto.lastName = cu.getLastName();
+        dto.email = cu.getEmail();
+        dto.phoneNumber = cu.getPhoneNumber();
+        dto.address = cu.getAddress();
+        dto.authorities = cu.getAuthorities();
 
         return dto;
     }
 
     private Customer transferToCustomer(CustomerDto customerDto) {
-        
+
         Customer customer = new Customer();
 
         customer.setUsername(customerDto.getUsername());
-        customer.setAddress(customerDto.getAddress());
-        customer.setEmail(customerDto.getEmail());
-        customer.setCustomerPhone(customerDto.getCustomerPhone());
-        customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setPassword(customerDto.getPassword());
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
+        customer.setEmail(customerDto.getEmail());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setAddress(customerDto.getAddress());
+        customer.setAuthorities(customerDto.getAuthorities());
 
         return customer;
     }

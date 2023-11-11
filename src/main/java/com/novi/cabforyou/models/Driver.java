@@ -1,9 +1,8 @@
 package com.novi.cabforyou.models;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,46 +10,29 @@ import java.util.Set;
 @Table(name="drivers")
 public class Driver extends User {
 
-    private String driverCallSign;
-
-    private String driverPhone;
-
     private String licenceNumber;
+    @OneToOne
+    @JoinColumn(name="car_id")
+    private Car car;
 
-    @ManyToMany(mappedBy = "drivers")
-    List<Car> cars = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "driver",
+            fetch = FetchType.LAZY
+    )
+    @JsonIgnore
+    private List<Trip> trips;
 
     public Driver() {}
 
-    public Driver(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String driverCallSign, String driverPhone, String licenceNumber, List<Car> cars) {
+    public Driver(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String licenceNumber, Car car) {
         super(username, password, authorities, email, firstName, lastName, phoneNumber);
-        this.driverCallSign = driverCallSign;
-        this.driverPhone = driverPhone;
         this.licenceNumber = licenceNumber;
-        this.cars = cars;
+        this.car = car;
     }
 
-    public Driver(String driverCallSign, String driverPhone, String licenceNumber, List<Car> cars) {
-        this.driverCallSign = driverCallSign;
-        this.driverPhone = driverPhone;
+    public Driver(String licenceNumber, Car car) {
         this.licenceNumber = licenceNumber;
-        this.cars = cars;
-    }
-
-    public String getDriverCallSign() {
-        return driverCallSign;
-    }
-
-    public void setDriverCallSign(String driverCallSign) {
-        this.driverCallSign = driverCallSign;
-    }
-
-    public String getDriverPhone() {
-        return driverPhone;
-    }
-
-    public void setDriverPhone(String driverPhone) {
-        this.driverPhone = driverPhone;
+        this.car = car;
     }
 
     public String getLicenceNumber() {
@@ -61,11 +43,24 @@ public class Driver extends User {
         this.licenceNumber = licenceNumber;
     }
 
-    public List<Car> getCars() {
-        return cars;
+    public Car getCar() {
+        return car;
     }
 
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
+    public void setCar(Car car) {
+        this.car = car;
     }
+
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(List<Trip> trips) {
+        this.trips = trips;
+    }
+
+    public void addTrip(Trip trip) {this.trips.add(trip);}
+
+    public void deleteTrip(Trip trip) {this.trips.remove(trip);}
+
 }

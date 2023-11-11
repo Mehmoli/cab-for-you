@@ -5,8 +5,6 @@ import com.novi.cabforyou.models.Authority;
 import java.util.Set;
 
 public class CustomerDto {
-    public String address;
-    public int customerPhone;
 
     public String username;
 
@@ -15,6 +13,7 @@ public class CustomerDto {
     public String email;
     public String firstName;
     public String lastName;
+    public String address;
     public String phoneNumber;
 
     public Set<Authority> authorities;
@@ -24,14 +23,6 @@ public class CustomerDto {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public int getCustomerPhone() {
-        return customerPhone;
-    }
-
-    public void setCustomerPhone(int customerPhone) {
-        this.customerPhone = customerPhone;
     }
 
     public String getUsername() {

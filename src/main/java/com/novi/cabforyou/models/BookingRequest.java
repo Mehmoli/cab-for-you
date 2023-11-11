@@ -5,20 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 @Entity
-@Table(name="bookings")
-public class Booking {
+@Table(name = "bookingrequests")
+public class BookingRequest {
 
     @Id
     @GeneratedValue
     Long bookingId;
-
-    @ManyToOne
-    private Customer customer;
-
-    @OneToOne
-    private Invoice invoice;
 
     private LocalDate tripDate;
 
@@ -48,35 +41,24 @@ public class Booking {
 
     private double distanceInKm;
 
-    private double tripKmPriceMiniBus;
-
-    private  double tripKmPriceCar;
-
-//    private double busTripKmPrice;
+    private double kmPrice;
 
     private double tripPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_username")
+    private Customer customer;
+    @ManyToOne
+    @JoinColumn(name = "planner_username")
+    private Planner planner;
+
+    @ManyToOne
+    private Trip trip;
     @Enumerated(EnumType.STRING)
-    private CarType carType;
+    private CarType carType = CarType.SEDAN;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
-
-    public double getTripKmPriceMiniBus() {
-        return tripKmPriceMiniBus;
-    }
-
-    public void setTripKmPriceMiniBus(double tripKmPriceMiniBus) {
-        this.tripKmPriceMiniBus = tripKmPriceMiniBus;
-    }
-
-    public double getTripKmPriceCar() {
-        return tripKmPriceCar;
-    }
-
-    public void setTripKmPriceCar(double tripKmPriceCar) {
-        this.tripKmPriceCar = tripKmPriceCar;
-    }
-
+    private BookingStatus bookingStatus = BookingStatus.REQUEST;
     public Long getBookingId() {
         return bookingId;
     }
@@ -133,6 +115,46 @@ public class Booking {
         this.distanceInKm = distanceInKm;
     }
 
+    public double getKmPrice() {
+        return kmPrice;
+    }
+
+    public void setKmPrice(double kmPrice) {
+        this.kmPrice = kmPrice;
+    }
+
+    public double getTripPrice() {
+        return tripPrice;
+    }
+
+    public void setTripPrice(double tripPrice) {
+        this.tripPrice = tripPrice;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Planner getPlanner() {
+        return planner;
+    }
+
+    public void setPlanner(Planner planner) {
+        this.planner = planner;
+    }
+
+    public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }
+
     public CarType getCarType() {
         return carType;
     }
@@ -148,22 +170,4 @@ public class Booking {
     public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }
-
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-    }
-
-    public double getTripPrice() {
-        return tripPrice;
-    }
-
-    public void setTripPrice(double tripPrice) {
-        this.tripPrice = tripPrice;
-    }
-
-
 }

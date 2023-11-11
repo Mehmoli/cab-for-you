@@ -4,6 +4,7 @@ import com.novi.cabforyou.dtos.PlannerDto;
 import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Planner;
 import com.novi.cabforyou.repositories.PlannerRepository;
+import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,18 @@ import java.util.Optional;
 @Service
 public class PlannerService {
 
-    private PlannerRepository plannerRepository;
+    private final PlannerRepository plannerRepository;
+    private final TripRepository tripRepository;
 
-    public PlannerService(PlannerRepository plannerRepository){
+    public PlannerService(PlannerRepository plannerRepository, TripRepository tripRepository) {
         this.plannerRepository = plannerRepository;
+        this.tripRepository = tripRepository;
     }
 
     public List<PlannerDto> getAllPlanners() {
         List<PlannerDto> plannerDto = new ArrayList<>();
         List<Planner> planners = plannerRepository.findAll();
-        for (Planner dr: planners){
+        for (Planner dr : planners) {
             plannerDto.add(transferToPlannerDto(dr));
         }
         return plannerDto;
@@ -47,18 +50,19 @@ public class PlannerService {
         return plannerDto;
     }
 
+    @Transactional
+    public PlannerDto updatePlanner(String username, PlannerDto updatedPlannerDto) {
+        Optional<Planner> optionalPlanner = plannerRepository.findByUsername(username);
 
-    public void updatePlanner(String username, PlannerDto newPlanner) {
-        Optional<Planner> plannerOptional = plannerRepository.findByUsername(username);
+        if (optionalPlanner.isPresent()) {
+            Planner existingPlanner = optionalPlanner.get();
 
-        if (plannerOptional.isPresent()) {
-            Planner planner = plannerOptional.get();
-            planner.setEmail(newPlanner.getEmail());
-            planner.setPlannerName(newPlanner.getPlannerName());
-            planner.setUsername(newPlanner.getUsername());
-            planner.setPassword(newPlanner.getPassword());
+            existingPlanner.setPassword(updatedPlannerDto.getPassword());
+            existingPlanner.setEmail(updatedPlannerDto.getEmail());
+            existingPlanner.setEmployeeNumber(updatedPlannerDto.getEmployeeNumber());
+            existingPlanner.setPhoneNumber(updatedPlannerDto.getPhoneNumber());
 
-            plannerRepository.save(planner);
+            return transferToPlannerDto(existingPlanner);
         } else {
             throw new UsernameNotFoundException(username);
         }
@@ -69,6 +73,30 @@ public class PlannerService {
         plannerRepository.deleteByUsername(username);
     }
 
+    @Transactional
+    public PlannerDto patchPlanner(String username, PlannerDto updatedPlannerDto) {
+        Optional<Planner> optionalPlanner = plannerRepository.findByUsername(username);
+        if (optionalPlanner.isPresent()) {
+            Planner existingPlanner = optionalPlanner.get();
+
+            if (updatedPlannerDto.getEmail() != null) {
+                existingPlanner.setEmail(updatedPlannerDto.getEmail());
+            }
+            if (updatedPlannerDto.getEmployeeNumber() != null) {
+                existingPlanner.setEmployeeNumber(updatedPlannerDto.getEmployeeNumber());
+            }
+            if (updatedPlannerDto.getPhoneNumber() != null) {
+                existingPlanner.setPhoneNumber(updatedPlannerDto.getPhoneNumber());
+            }
+
+            plannerRepository.save(existingPlanner);
+
+            return transferToPlannerDto(existingPlanner);
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
     private PlannerDto transferToPlannerDto(Planner planner) {
 
         var dto = new PlannerDto();
@@ -76,7 +104,9 @@ public class PlannerService {
         dto.username = planner.getUsername();
         dto.password = planner.getPassword();
         dto.email = planner.getEmail();
-        dto.plannerName = planner.getPlannerName();
+        dto.employeeNumber = planner.getEmployeeNumber();
+        dto.phoneNumber = planner.getPhoneNumber();
+        dto.authorities = planner.getAuthorities();
 
         return dto;
     }
@@ -88,8 +118,11 @@ public class PlannerService {
         planner.setUsername(plannerDto.getUsername());
         planner.setPassword(plannerDto.getPassword());
         planner.setEmail(plannerDto.getEmail());
-        planner.setPlannerName(plannerDto.getPlannerName());
+        planner.setEmployeeNumber(plannerDto.getEmployeeNumber());
+        planner.setPhoneNumber(plannerDto.getPhoneNumber());
+        planner.setAuthorities(plannerDto.getAuthorities());
 
         return planner;
     }
+
 }

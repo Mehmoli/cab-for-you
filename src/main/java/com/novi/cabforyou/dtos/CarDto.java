@@ -66,4 +66,5 @@ public class CarDto {
     public void setCarType(CarType carType) {
         this.carType = carType;
     }
+
 }
