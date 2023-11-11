@@ -13,15 +13,13 @@ public class FeedbackController {
 
     private FeedbackService feedbackService;
 
-    public FeedbackController (FeedbackService feedbackService){
+    public FeedbackController(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
     }
 
     @GetMapping("")
     public ResponseEntity<List<FeedbackDto>> getAllFeedbacks() {
-
         List<FeedbackDto> dtos = feedbackService.getAllFeedbacks();
-
         return ResponseEntity.ok(dtos);
     }
 

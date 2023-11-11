@@ -1,17 +1,16 @@
 package com.novi.cabforyou.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name="feedbacks")
+@Table(name = "feedbacks")
 public class Feedback {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long feedbackId;
 
     @NotNull(message = "Add feedback here")
@@ -27,8 +26,8 @@ public class Feedback {
 //	@JsonFormat(pattern = "dd/mm/yyyy")
     private LocalDate submitDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "customer_username")
     private Customer feedbackOfCustomer;
 
     public Long getFeedbackId() {
