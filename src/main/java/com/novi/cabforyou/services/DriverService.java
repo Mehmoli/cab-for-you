@@ -111,6 +111,7 @@ public class DriverService {
             throw new UsernameNotFoundException(username);
         }
     }
+
     public List<TripDto> getDriverTripsDto(String username) {
         List<Trip> trips = getDriverTrips(username);
         return trips.stream().map(TripDto::transferToTripDto).toList();

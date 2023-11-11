@@ -17,21 +17,25 @@ public class Customer extends User {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private List<BookingRequest> bookingRequests = new ArrayList<>();
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "feedback_id", referencedColumnName = "feedbackId")
-    private Feedback feedbacks;
+    @OneToMany(
+            targetEntity = Feedback.class,
+            mappedBy = "feedbackOfCustomer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     public Customer() {
     }
 
-    public Customer(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String address, List<BookingRequest> bookingRequests, Feedback feedbacks) {
+    public Customer(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String address, List<BookingRequest> bookingRequests, List<Feedback> feedbacks) {
         super(username, password, authorities, email, firstName, lastName, phoneNumber);
         this.address = address;
         this.bookingRequests = bookingRequests;
         this.feedbacks = feedbacks;
     }
 
-    public Customer(String address, List<BookingRequest> bookingRequests, Feedback feedbacks) {
+    public Customer(String address, List<BookingRequest> bookingRequests, List<Feedback> feedbacks) {
         this.address = address;
         this.bookingRequests = bookingRequests;
         this.feedbacks = feedbacks;
@@ -49,5 +53,19 @@ public class Customer extends User {
         this.address = address;
     }
 
+    public List<BookingRequest> getBookingRequests() {
+        return bookingRequests;
+    }
 
+    public void setBookingRequests(List<BookingRequest> bookingRequests) {
+        this.bookingRequests = bookingRequests;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
 }
