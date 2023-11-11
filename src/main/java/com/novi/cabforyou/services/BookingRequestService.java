@@ -3,6 +3,7 @@ package com.novi.cabforyou.services;
 import com.novi.cabforyou.dtos.BookingRequestDto;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.BookingRequest;
+import com.novi.cabforyou.models.BookingStatus;
 import com.novi.cabforyou.models.CarType;
 import com.novi.cabforyou.repositories.BookingRequestRepository;
 import com.novi.cabforyou.repositories.TripRepository;
@@ -28,7 +29,7 @@ public class BookingRequestService {
         List<BookingRequestDto> bookingRequestDto = new ArrayList<>();
         List<BookingRequest> bookingRequests = bookingRequestRepository.findAll();
         for (BookingRequest b: bookingRequests){
-            bookingRequestDto.add(transferToDto(b));
+            bookingRequestDto.add(transferToBookingRequestDto(b));
         }
         return bookingRequestDto;
     }
@@ -36,7 +37,7 @@ public class BookingRequestService {
     public BookingRequestDto getBooking(long id) {
         Optional<BookingRequest> booking = bookingRequestRepository.findById(id);
         if(booking.isPresent()) {
-            return transferToDto(booking.get());
+            return transferToBookingRequestDto(booking.get());
         } else {
             throw new RecordNotFoundException("No booking found!!!");
         }
@@ -45,24 +46,16 @@ public class BookingRequestService {
     public BookingRequestDto addBooking(BookingRequestDto bookingRequestDto) {
         BookingRequest bookingRequest = transferToBooking(bookingRequestDto);
 
-        CarType selectedCarType = bookingRequestDto.getCarType();
-        double kmPrice= getCorrectKmPrice(selectedCarType);
-        bookingRequestDto.setKmPrice(kmPrice);
-        bookingRequest.setKmPrice(kmPrice);
-
-        double distanceInKM = bookingRequestDto.getDistanceInKm();
-
-        double tripPrice = calculateTripPrice(selectedCarType, distanceInKM);
-        bookingRequestDto.setTripPrice(tripPrice);
-        bookingRequest.setTripPrice(tripPrice);
+        CalculatedTripAndKmPriceSetter(bookingRequestDto, bookingRequest);
         bookingRequestRepository.save(bookingRequest);
         return bookingRequestDto;
     }
 
-
     public void updateBooking (Long id, BookingRequestDto newBooking){
-        if(!bookingRequestRepository.existsById(id)) throw new RecordNotFoundException();
+        if(!bookingRequestRepository.existsById(id)) throw new RecordNotFoundException("BookingRequest not found");
         BookingRequest bookingRequest = bookingRequestRepository.findById(id).get();
+
+        CalculatedTripAndKmPriceSetter(newBooking, bookingRequest);
 
         bookingRequest.setTripDate(newBooking.getTripDate());
         bookingRequest.setTripTime(newBooking.getTripTime());
@@ -70,59 +63,84 @@ public class BookingRequestService {
         bookingRequest.setToAddress(newBooking.getToAddress());
         bookingRequest.setNumberOfPeople(newBooking.getNumberOfPeople());
         bookingRequest.setDistanceInKm(newBooking.getDistanceInKm());
-        bookingRequest.setKmPrice(newBooking.getKmPrice());
-        bookingRequest.setTripPrice(newBooking.getTripPrice());
         bookingRequest.setCarType(newBooking.getCarType());
         bookingRequest.setBookingStatus(newBooking.getBookingStatus());
         bookingRequestRepository.save(bookingRequest);
     }
 
-    public BookingRequest patchBooking(Long id, BookingRequest bookingRequest) {
-        if (!bookingRequestRepository.existsById(id)) {
-            throw new RecordNotFoundException("BookingRequest not found");}
+    private void CalculatedTripAndKmPriceSetter(BookingRequestDto newBooking, BookingRequest bookingRequest) {
+        CarType selectedCarType = newBooking.getCarType();
+        double kmPrice= getCorrectKmPrice(selectedCarType);
+        newBooking.setKmPrice(kmPrice);
+        bookingRequest.setKmPrice(kmPrice);
 
-        BookingRequest patchBookingRequest = bookingRequestRepository.findById(id).orElse(null);
+        double distanceInKM = newBooking.getDistanceInKm();
 
-        if(bookingRequest.getTrip() != null){
-            patchBookingRequest.setTrip(tripRepository.getById(bookingRequest.getTrip().getTripId()));
+        double tripPrice = calculateTripPrice(selectedCarType, distanceInKM);
+        newBooking.setTripPrice(tripPrice);
+        bookingRequest.setTripPrice(tripPrice);
+    }
+
+
+    public BookingRequestDto patchBookingRequest(Long id, BookingRequestDto updatedBookingRequestDto) {
+        Optional<BookingRequest> optionalBookingRequest = bookingRequestRepository.findById(id);
+
+        if (optionalBookingRequest.isPresent()) {
+
+            BookingRequest existingBookingRequest = optionalBookingRequest.get();
+
+
+        if(updatedBookingRequestDto.getTrip() != null){
+            existingBookingRequest.setTrip(tripRepository.getById(updatedBookingRequestDto.getTrip().getTripId()));
         }
-        if (bookingRequest.getCustomer() != null) {
-            patchBookingRequest.setCustomer(bookingRequest.getCustomer());
+        if (updatedBookingRequestDto.getCustomer() != null) {
+            existingBookingRequest.setCustomer(updatedBookingRequestDto.getCustomer());
         }
-//        if (bookingRequest.getInvoice() != null) {
-//            patchBookingRequest.setInvoice(bookingRequest.getInvoice());
-//        }
-        if (bookingRequest.getTripDate() != null) {
-            patchBookingRequest.setTripDate(bookingRequest.getTripDate());
+        if (updatedBookingRequestDto.getTripDate() != null) {
+            existingBookingRequest.setTripDate(updatedBookingRequestDto.getTripDate());
         }
-        if (bookingRequest.getTripTime() != null) {
-            patchBookingRequest.setTripTime(bookingRequest.getTripTime());
+        if (updatedBookingRequestDto.getTripTime() != null) {
+            existingBookingRequest.setTripTime(updatedBookingRequestDto.getTripTime());
         }
-        if (bookingRequest.getFromAddress() != null) {
-            patchBookingRequest.setFromAddress(bookingRequest.getFromAddress());
+        if (updatedBookingRequestDto.getFromAddress() != null) {
+            existingBookingRequest.setFromAddress(updatedBookingRequestDto.getFromAddress());
         }
-        if (bookingRequest.getToAddress() != null) {
-            patchBookingRequest.setToAddress(bookingRequest.getToAddress());
+        if (updatedBookingRequestDto.getToAddress() != null) {
+            existingBookingRequest.setToAddress(updatedBookingRequestDto.getToAddress());
         }
-        if (bookingRequest.getNumberOfPeople() != 0) {
-            patchBookingRequest.setNumberOfPeople(bookingRequest.getNumberOfPeople());
+        if (updatedBookingRequestDto.getNumberOfPeople() != 0) {
+            existingBookingRequest.setNumberOfPeople(updatedBookingRequestDto.getNumberOfPeople());
         }
-        if (bookingRequest.getDistanceInKm() != 0) {
-            patchBookingRequest.setDistanceInKm(bookingRequest.getDistanceInKm());
+        if (updatedBookingRequestDto.getDistanceInKm() != 0) {
+            existingBookingRequest.setDistanceInKm(updatedBookingRequestDto.getDistanceInKm());
         }
-        if (bookingRequest.getCarType() != null) {
-            patchBookingRequest.setCarType(bookingRequest.getCarType());
+        if (updatedBookingRequestDto.getKmPrice() != 0) {
+            existingBookingRequest.setKmPrice(updatedBookingRequestDto.getKmPrice());
         }
-        if (bookingRequest.getBookingStatus() != null) {
-            patchBookingRequest.setBookingStatus(bookingRequest.getBookingStatus());
+        if (updatedBookingRequestDto.getTripPrice() != 0) {
+                existingBookingRequest.setTripPrice(updatedBookingRequestDto.getTripPrice());
+        }
+        if (updatedBookingRequestDto.getCarType() != null) {
+            existingBookingRequest.setCarType(updatedBookingRequestDto.getCarType());
+        }
+        if (updatedBookingRequestDto.getBookingStatus() != null) {
+            existingBookingRequest.setBookingStatus(updatedBookingRequestDto.getBookingStatus());
         }
 
-        bookingRequestRepository.save(patchBookingRequest);
-        return patchBookingRequest;
+        bookingRequestRepository.save(existingBookingRequest);
+
+            return transferToBookingRequestDto(existingBookingRequest);
+        } else {
+            throw new RecordNotFoundException("Booking request not found");
+        }
     }
 
     public void deleteBooking (long id){
         bookingRequestRepository.deleteById(id);
+    }
+
+    public List<BookingRequest> getBookingRequestsByStatus(BookingStatus status) {
+        return bookingRequestRepository.findByBookingStatus(status);
     }
 
     // Is van client naar server
@@ -145,8 +163,7 @@ public class BookingRequestService {
         return bookingRequest;
     }
 
-    // Is van Server naar Client
-    private BookingRequestDto transferToDto(BookingRequest bookingRequest) {
+    private BookingRequestDto transferToBookingRequestDto(BookingRequest bookingRequest) {
         var dto = new BookingRequestDto();
 
         dto.bookingId = bookingRequest.getBookingId();
@@ -165,25 +182,32 @@ public class BookingRequestService {
         return dto;
     }
 
-    public double getCorrectKmPrice(CarType carType){
-       double basekmPrice = carType.getPrice();
-       double newkmPrice = basekmPrice;
+    private BookingRequest transferToBookingRequest(BookingRequestDto bookingRequestDto) {
 
-       return newkmPrice;
+        BookingRequest bookingRequest = new BookingRequest();
+
+        bookingRequest.setTripDate(bookingRequestDto.getTripDate());
+        bookingRequest.setTripTime(bookingRequestDto.getTripTime());
+        bookingRequest.setNumberOfPeople(bookingRequestDto.getNumberOfPeople());
+        bookingRequest.setFromAddress(bookingRequestDto.getFromAddress());
+        bookingRequest.setToAddress(bookingRequestDto.getToAddress());
+        bookingRequest.setDistanceInKm(bookingRequest.getDistanceInKm());
+        bookingRequest.setTripPrice(bookingRequestDto.getTripPrice());
+        bookingRequest.setTrip(bookingRequestDto.getTrip());
+
+        return bookingRequest;
+    }
+
+    public double getCorrectKmPrice(CarType carType){
+
+        return carType.getPrice();
     }
 
     public double calculateTripPrice(CarType carType, double distanceInKM) {
 
         double basePrice = carType.getPrice();
 
-        double tripPrice = Precision.round((basePrice * distanceInKM),2);
-
-        return tripPrice;
+        return Precision.round((basePrice * distanceInKM),2);
     }
 
-
-    public BookingRequest getOne(Long bookingId) {
-     // Todo
-        return null;
-    }
 }

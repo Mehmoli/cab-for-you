@@ -1,8 +1,10 @@
 package com.novi.cabforyou.controllers;
 
-
 import com.novi.cabforyou.dtos.BookingRequestDto;
+import com.novi.cabforyou.models.BookingRequest;
+import com.novi.cabforyou.models.BookingStatus;
 import com.novi.cabforyou.services.BookingRequestService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +16,9 @@ public class BookingRequestController {
 
     private final BookingRequestService bookingRequestService;
 
-    public BookingRequestController(BookingRequestService bookingRequestService){
+    public BookingRequestController(BookingRequestService bookingRequestService) {
         this.bookingRequestService = bookingRequestService;
     }
-
 
     @GetMapping("")
     public ResponseEntity<List<BookingRequestDto>> getAllBookings() {
@@ -47,10 +48,24 @@ public class BookingRequestController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<BookingRequestDto> patchBookingRequest(@PathVariable("id") Long id, @RequestBody BookingRequestDto updatedBookingRequestDto) {
+        BookingRequestDto updatedDto = bookingRequestService.patchBookingRequest(id, updatedBookingRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteBooking(@PathVariable("id") long id) {
         bookingRequestService.deleteBooking(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // STATUS
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<BookingRequestDto>> getBookingRequestsByStatus(@PathVariable("status") BookingStatus status) {
+        List<BookingRequest> bookings = bookingRequestService.getBookingRequestsByStatus(status);
+        List<BookingRequestDto> bookingRequestDto = bookings.stream().map(BookingRequestDto::transferToBookingRequestDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(bookingRequestDto);
     }
 
 }

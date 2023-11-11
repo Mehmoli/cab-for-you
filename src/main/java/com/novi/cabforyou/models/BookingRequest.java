@@ -1,13 +1,12 @@
 package com.novi.cabforyou.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name="bookingRequests")
+@Table(name = "bookingrequests")
 public class BookingRequest {
 
     @Id
@@ -47,50 +46,25 @@ public class BookingRequest {
     private double tripPrice;
 
     @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name = "customer_username")
     private Customer customer;
-
     @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name = "planner_username")
     private Planner planner;
 
-    @OneToOne
+    @ManyToOne
     private Trip trip;
     @Enumerated(EnumType.STRING)
-    private CarType carType =CarType.SEDAN;
+    private CarType carType = CarType.SEDAN;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus =BookingStatus.REQUEST;
+    private BookingStatus bookingStatus = BookingStatus.REQUEST;
     public Long getBookingId() {
         return bookingId;
     }
 
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Planner getPlanner() {
-        return planner;
-    }
-
-    public void setPlanner(Planner planner) {
-        this.planner = planner;
-    }
-
-    public Trip getTrip() {
-        return trip;
-    }
-
-    public void setTrip(Trip trip) {
-        this.trip = trip;
     }
 
     public LocalDate getTripDate() {
@@ -155,6 +129,30 @@ public class BookingRequest {
 
     public void setTripPrice(double tripPrice) {
         this.tripPrice = tripPrice;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Planner getPlanner() {
+        return planner;
+    }
+
+    public void setPlanner(Planner planner) {
+        this.planner = planner;
+    }
+
+    public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
     }
 
     public CarType getCarType() {

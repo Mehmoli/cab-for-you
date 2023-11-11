@@ -33,6 +33,7 @@ public class BookingRequestDto {
     public Customer customer;
     @JsonIncludeProperties("id")
     private Planner planner;
+
     @JsonIncludeProperties("id")
     public Trip trip;
 
@@ -43,7 +44,27 @@ public class BookingRequestDto {
     public BookingStatus bookingStatus;
 
     @JsonIgnore
-    public  double selectedCarType = CarType.SEDAN.getPrice();
+    public double selectedCarType = CarType.SEDAN.getPrice();
+
+    public BookingRequestDto(Long bookingId, LocalDate tripDate, LocalTime tripTime, FromAddress fromAddress, ToAddress toAddress, int numberOfPeople, double distanceInKm, double kmPrice, double tripPrice, Customer customer, Planner planner, Trip trip, CarType carType, BookingStatus bookingStatus) {
+        this.bookingId = bookingId;
+        this.tripDate = tripDate;
+        this.tripTime = tripTime;
+        this.fromAddress = fromAddress;
+        this.toAddress = toAddress;
+        this.numberOfPeople = numberOfPeople;
+        this.distanceInKm = distanceInKm;
+        this.kmPrice = kmPrice;
+        this.tripPrice = tripPrice;
+        this.customer = customer;
+        this.planner = planner;
+        this.trip = trip;
+        this.carType = carType;
+        this.bookingStatus = bookingStatus;
+    }
+
+    public BookingRequestDto() {
+    }
 
     public Long getBookingId() {
         return bookingId;
@@ -165,18 +186,22 @@ public class BookingRequestDto {
         this.selectedCarType = selectedCarType;
     }
 
-    public BookingRequest transferToBooking() {
-        BookingRequest bookingRequest = new BookingRequest();
-        bookingRequest.setTripDate(tripDate);
-        bookingRequest.setTripTime(tripTime);
-        bookingRequest.setNumberOfPeople(numberOfPeople);
-        bookingRequest.setFromAddress(fromAddress);
-        bookingRequest.setToAddress(toAddress);
-        bookingRequest.setDistanceInKm(distanceInKm);
-        bookingRequest.setTripPrice(tripPrice);
-        bookingRequest.setTrip(trip);
+    public static BookingRequestDto transferToBookingRequestDto(BookingRequest bookingRequest) {
 
-        return bookingRequest;
+        BookingRequestDto bookingRequestDto = new BookingRequestDto();
+        bookingRequestDto.bookingId = bookingRequest.getBookingId();
+        bookingRequestDto.tripDate = bookingRequest.getTripDate();
+        bookingRequestDto.tripTime = bookingRequest.getTripTime();
+        bookingRequestDto.bookingStatus = bookingRequest.getBookingStatus();
+        bookingRequestDto.fromAddress = bookingRequest.getFromAddress();
+        bookingRequestDto.toAddress = bookingRequest.getToAddress();
+        bookingRequestDto.carType = bookingRequest.getCarType();
+        bookingRequestDto.numberOfPeople = bookingRequest.getNumberOfPeople();
+        bookingRequestDto.distanceInKm = bookingRequest.getDistanceInKm();
+        bookingRequestDto.kmPrice = bookingRequest.getKmPrice();
+        bookingRequestDto.tripPrice = bookingRequest.getTripPrice();
+        return bookingRequestDto;
+
+
     }
-
 }
