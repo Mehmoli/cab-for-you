@@ -1,2 +1,4 @@
-package com.novi.cabforyou.dtos;public interface OnCreate {
+package com.novi.cabforyou.dtos;
+
+public interface OnCreateValidation {
 }
