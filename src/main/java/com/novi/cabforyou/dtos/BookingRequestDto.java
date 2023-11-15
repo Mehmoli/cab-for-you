@@ -6,12 +6,14 @@ import com.novi.cabforyou.models.BookingStatus;
 import com.novi.cabforyou.models.CarType;
 import com.novi.cabforyou.models.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class BookingRequestDto {
 
+    @NotNull(message = "Field cannot be null", groups = OnUpdateValidation.class)
     public Long bookingId;
 
     public LocalDate tripDate;
@@ -29,13 +31,14 @@ public class BookingRequestDto {
 
     public double tripPrice;
 
-    @JsonIncludeProperties("id")
-    public Customer customer;
-    @JsonIncludeProperties("id")
-    private Planner planner;
+    @JsonIncludeProperties("username")
+    public CustomerDto customer;
+
+    @JsonIncludeProperties("username")
+    public PlannerDto planner;
 
     @JsonIncludeProperties("id")
-    public Trip trip;
+    public TripDto trip;
 
     @Enumerated
     public CarType carType;
@@ -46,7 +49,7 @@ public class BookingRequestDto {
     @JsonIgnore
     public double selectedCarType = CarType.SEDAN.getPrice();
 
-    public BookingRequestDto(Long bookingId, LocalDate tripDate, LocalTime tripTime, FromAddress fromAddress, ToAddress toAddress, int numberOfPeople, double distanceInKm, double kmPrice, double tripPrice, Customer customer, Planner planner, Trip trip, CarType carType, BookingStatus bookingStatus) {
+    public BookingRequestDto(Long bookingId, LocalDate tripDate, LocalTime tripTime, FromAddress fromAddress, ToAddress toAddress, int numberOfPeople, double distanceInKm, double kmPrice, double tripPrice, CustomerDto customer, PlannerDto planner, TripDto trip, CarType carType, BookingStatus bookingStatus) {
         this.bookingId = bookingId;
         this.tripDate = tripDate;
         this.tripTime = tripTime;
@@ -138,27 +141,27 @@ public class BookingRequestDto {
         this.kmPrice = kmPrice;
     }
 
-    public Customer getCustomer() {
+    public CustomerDto getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerDto customer) {
         this.customer = customer;
     }
 
-    public Planner getPlanner() {
+    public PlannerDto getPlanner() {
         return planner;
     }
 
-    public void setPlanner(Planner planner) {
+    public void setPlanner(PlannerDto planner) {
         this.planner = planner;
     }
 
-    public Trip getTrip() {
+    public TripDto getTrip() {
         return trip;
     }
 
-    public void setTrip(Trip trip) {
+    public void setTrip(TripDto trip) {
         this.trip = trip;
     }
 
@@ -201,7 +204,5 @@ public class BookingRequestDto {
         bookingRequestDto.kmPrice = bookingRequest.getKmPrice();
         bookingRequestDto.tripPrice = bookingRequest.getTripPrice();
         return bookingRequestDto;
-
-
     }
 }
