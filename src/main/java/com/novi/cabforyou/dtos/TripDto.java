@@ -14,12 +14,12 @@ public class TripDto {
     @Valid
     @JsonInclude
     @JsonIncludeProperties({"bookingId",
-            "tripDate",
-            "tripTime",
-            "fromAddress",
-            "toAddress",
-            "bookingStatus",
-            "carType"})
+                            "tripDate",
+                            "tripTime",
+                            "fromAddress",
+                            "toAddress",
+                            "bookingStatus",
+                            "carType"})
     public BookingRequestDto bookingRequest;
 
     public TripDto(Long tripId, DriverDto driver, BookingRequestDto bookingRequest) {
