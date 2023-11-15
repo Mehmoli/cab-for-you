@@ -6,8 +6,8 @@ import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Driver;
 import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.DriverRepository;
-import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,11 +18,12 @@ import java.util.Optional;
 public class DriverService {
 
     private final DriverRepository driverRepository;
-    private final TripRepository tripRepository;
 
-    public DriverService(DriverRepository driverRepository, TripRepository tripRepository) {
+    private final TripService tripService;
+
+    public DriverService(DriverRepository driverRepository, @Lazy TripService tripService) {
         this.driverRepository = driverRepository;
-        this.tripRepository = tripRepository;
+        this.tripService = tripService;
     }
 
     public List<DriverDto> getAllDrivers() {
@@ -114,10 +115,10 @@ public class DriverService {
 
     public List<TripDto> getDriverTripsDto(String username) {
         List<Trip> trips = getDriverTrips(username);
-        return trips.stream().map(TripDto::transferToTripDto).toList();
+        return trips.stream().map(tripService::transferToTripDto).toList();
     }
 
-    private DriverDto transferToDriverDto(Driver driver) {
+    public DriverDto transferToDriverDto(Driver driver) {
 
         var dto = new DriverDto();
 
@@ -132,9 +133,7 @@ public class DriverService {
     }
 
     private Driver transferToDriver(DriverDto driverDto) {
-
         Driver driver = new Driver();
-
         driver.setUsername(driverDto.getUsername());
         driver.setPassword(driverDto.getPassword());
         driver.setEmail(driverDto.getEmail());
@@ -144,5 +143,4 @@ public class DriverService {
 
         return driver;
     }
-
 }
