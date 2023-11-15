@@ -52,7 +52,7 @@ public class BookingRequest {
     @JoinColumn(name = "planner_username")
     private Planner planner;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "bookingRequest")
     private Trip trip;
     @Enumerated(EnumType.STRING)
     private CarType carType = CarType.SEDAN;
