@@ -8,6 +8,7 @@ import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.DriverRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ public class DriverService {
     private final DriverRepository driverRepository;
 
     private final TripService tripService;
+    private final PasswordEncoder passwordEncoder;
 
-    public DriverService(DriverRepository driverRepository, @Lazy TripService tripService) {
+    public DriverService(DriverRepository driverRepository, @Lazy TripService tripService, PasswordEncoder passwordEncoder) {
         this.driverRepository = driverRepository;
         this.tripService = tripService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<DriverDto> getAllDrivers() {
@@ -135,7 +138,7 @@ public class DriverService {
     private Driver transferToDriver(DriverDto driverDto) {
         Driver driver = new Driver();
         driver.setUsername(driverDto.getUsername());
-        driver.setPassword(driverDto.getPassword());
+        driver.setPassword(passwordEncoder.encode(driverDto.getPassword()));
         driver.setEmail(driverDto.getEmail());
         driver.setLicenceNumber(driverDto.getLicenceNumber());
         driver.setPhoneNumber(driverDto.getPhoneNumber());
