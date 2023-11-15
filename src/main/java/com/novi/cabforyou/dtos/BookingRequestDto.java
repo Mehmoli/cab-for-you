@@ -19,9 +19,9 @@ public class BookingRequestDto {
     public LocalDate tripDate;
 
     public LocalTime tripTime;
-    //From
+
     public FromAddress fromAddress;
-    //To
+
     public ToAddress toAddress;
 
     public int numberOfPeople;
