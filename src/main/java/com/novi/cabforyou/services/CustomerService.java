@@ -90,7 +90,7 @@ public class CustomerService {
         customerRepository.deleteByUsername(username);
     }
 
-    private CustomerDto transferToCustomerDto(Customer cu) {
+    public CustomerDto transferToCustomerDto(Customer cu) {
 
         var dto = new CustomerDto();
 
@@ -123,4 +123,7 @@ public class CustomerService {
     }
 
 
+    public Object getCustomerByUsername(String username) {
+        return null;
+    }
 }
