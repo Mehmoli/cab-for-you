@@ -97,7 +97,7 @@ public class PlannerService {
         }
     }
 
-    private PlannerDto transferToPlannerDto(Planner planner) {
+    public PlannerDto transferToPlannerDto(Planner planner) {
 
         var dto = new PlannerDto();
 
