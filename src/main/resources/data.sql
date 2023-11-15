@@ -5,23 +5,23 @@ INSERT INTO cars (available_seats, car_id, car_type, license_plate, make, model)
 INSERT INTO cars (available_seats, car_id, car_type, license_plate, make, model) VALUES(8, 1004, 'BIGBUS', 'BB-BB-44', 'Volkswagen', 'Transpoter');
 
 -- USER
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientone@cab.com', 'Alex', 'Alexander', '123456', '0123456789', 'cabclientone');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientwo@cab.nl', 'John', 'Doe', '222222', '1234567890', 'cabclienttwo');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientthree@cab.org', 'Jan', 'de Wit', '111111', '2345678901', 'cabclientthree');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientfour@cab.nl', 'Arjan', 'Roze', '333333', '3456789012', 'cabclientfour');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientfive@cab.com', 'Cees', 'van Dame', '444444', '4567890123', 'cabclientfive');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientsix@cab.nl', 'Henk', 'van de Pol', '555555', '5678901234', 'cabclientsix');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientone@cab.com', 'Alex', 'Alexander', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '0123456789', 'cabclientone');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientwo@cab.nl', 'John', 'Doe', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '1234567890', 'cabclienttwo');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientthree@cab.org', 'Jan', 'de Wit', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '2345678901', 'cabclientthree');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientfour@cab.nl', 'Arjan', 'Roze', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '3456789012', 'cabclientfour');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientfive@cab.com', 'Cees', 'van Dame', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '4567890123', 'cabclientfive');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('cabclientsix@cab.nl', 'Henk', 'van de Pol', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '5678901234', 'cabclientsix');
 
 -- DRIVER
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabone@cab.nl', 'Ali', 'Roze', '555556', '6789012345', 'drivercabone');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabtwo@cab.com', 'Cees', 'van Schaak', '666666', '7890123456', 'drivercabtwo');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabthree@cab.nl', 'Suzan', 'van Straten', '377777', '8901234567', 'drivercabthree');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabthree@cab.nl', 'Hans', 'de Driver', '477777', '9012345678', 'drivercabfour');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabone@cab.nl', 'Ali', 'Roze', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '6789012345', 'drivercabone');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabtwo@cab.com', 'Cees', 'van Schaak', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '7890123456', 'drivercabtwo');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabthree@cab.nl', 'Suzan', 'van Straten', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '8901234567', 'drivercabthree');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('drivercabthree@cab.nl', 'Hans', 'de Driver', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '9012345678', 'drivercabfour');
 
 -- PLANNER
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('plannercabone@cab.nl', 'Piet', 'Pieters', '888888', '0123456789', 'plannercabone');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('plannercabtwo@cab.com', 'Jan', 'Jansen', '999999', '1234567890', 'plannercabtwo');
-INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('plannercabthree@cab.nl', 'Suzan', 'Suzy', '000000', '2345678901', 'plannercabthree');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('plannercabone@cab.nl', 'Piet', 'Pieters', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '0123456789', 'plannercabone');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('plannercabtwo@cab.com', 'Jan', 'Jansen', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '1234567890', 'plannercabtwo');
+INSERT INTO users (email, firstname, lastname, "password", phone, username) VALUES('plannercabthree@cab.nl', 'Suzan', 'Suzy', '$2a$12$P1GRfJjkNk9GoUbM9KS.wu7koixQ0f0N32iRJj.r9vXmYx9TeRRFK', '2345678901', 'plannercabthree');
 
 -- ROLE USER
 INSERT INTO authorities (authority, username) VALUES('ROLE_USER', 'cabclientone');
