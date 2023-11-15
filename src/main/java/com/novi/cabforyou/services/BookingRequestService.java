@@ -2,10 +2,10 @@ package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.BookingRequestDto;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
-import com.novi.cabforyou.models.BookingRequest;
-import com.novi.cabforyou.models.BookingStatus;
-import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.models.*;
 import com.novi.cabforyou.repositories.BookingRequestRepository;
+import com.novi.cabforyou.repositories.CustomerRepository;
+import com.novi.cabforyou.repositories.PlannerRepository;
 import com.novi.cabforyou.repositories.TripRepository;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,21 @@ public class BookingRequestService {
     private final BookingRequestRepository bookingRequestRepository;
     private final TripRepository tripRepository;
 
-    public BookingRequestService(BookingRequestRepository bookingRequestRepository, TripRepository tripRepository) {
+    private final CustomerService customerService;
+
+    private final CustomerRepository customerRepository;
+
+    private final PlannerService plannerService;
+
+    private final PlannerRepository plannerRepository;
+
+    public BookingRequestService(BookingRequestRepository bookingRequestRepository, TripRepository tripRepository, CustomerService customerService, CustomerRepository customerRepository, PlannerService plannerService, PlannerRepository plannerRepository) {
         this.bookingRequestRepository = bookingRequestRepository;
         this.tripRepository = tripRepository;
+        this.customerService = customerService;
+        this.customerRepository = customerRepository;
+        this.plannerService = plannerService;
+        this.plannerRepository = plannerRepository;
     }
 
     public List<BookingRequestDto> getAllBookings(){
@@ -44,10 +56,27 @@ public class BookingRequestService {
     }
 
     public BookingRequestDto addBooking(BookingRequestDto bookingRequestDto) {
-        BookingRequest bookingRequest = transferToBooking(bookingRequestDto);
+        BookingRequest bookingRequest = transferToBookingRequest(bookingRequestDto);
+        if (bookingRequestDto.customer != null) {
+            Optional<Customer> customerOpt = customerRepository.findByUsername(bookingRequestDto.customer.username);
+            if (customerOpt.isPresent()) {
+                Customer customer = customerOpt.get();
+                bookingRequest.setCustomer(customer);
+            }
+        }
+
+        if (bookingRequestDto.planner != null) {
+            Optional<Planner> plannerOpt = plannerRepository.findByUsername(bookingRequestDto.planner.username);
+            if (plannerOpt.isPresent()) {
+                Planner planner = plannerOpt.get();
+                bookingRequest.setPlanner(planner);
+            }
+        }
 
         CalculatedTripAndKmPriceSetter(bookingRequestDto, bookingRequest);
         bookingRequestRepository.save(bookingRequest);
+
+        bookingRequestDto = transferToBookingRequestDto(bookingRequest);
         return bookingRequestDto;
     }
 
@@ -82,52 +111,61 @@ public class BookingRequestService {
     }
 
 
-    public BookingRequestDto patchBookingRequest(Long id, BookingRequestDto updatedBookingRequestDto) {
+    public BookingRequestDto patchBookingRequest(Long id, BookingRequestDto patchBookingRequest) {
         Optional<BookingRequest> optionalBookingRequest = bookingRequestRepository.findById(id);
 
         if (optionalBookingRequest.isPresent()) {
-
             BookingRequest existingBookingRequest = optionalBookingRequest.get();
 
+            if(patchBookingRequest.getTrip() != null){
+                existingBookingRequest.setTrip(tripRepository.getReferenceById(patchBookingRequest.getTrip().getTripId()));
+            }
+            if (patchBookingRequest.getCustomer() != null) {
+                Optional<Customer> customerOpt = customerRepository.findByUsername(patchBookingRequest.customer.username);
+                if (customerOpt.isPresent()) {
+                    Customer customer = customerOpt.get();
+                    existingBookingRequest.setCustomer(customer);
+                }
+            }
+            if (patchBookingRequest.getPlanner() != null) {
+                Optional<Planner> plannerOpt = plannerRepository.findByUsername(patchBookingRequest.planner.username);
+                if (plannerOpt.isPresent()) {
+                    Planner planner = plannerOpt.get();
+                    existingBookingRequest.setPlanner(planner);
+                }
+            }
+            if (patchBookingRequest.getTripDate() != null) {
+                existingBookingRequest.setTripDate(patchBookingRequest.getTripDate());
+            }
+            if (patchBookingRequest.getTripTime() != null) {
+                existingBookingRequest.setTripTime(patchBookingRequest.getTripTime());
+            }
+            if (patchBookingRequest.getFromAddress() != null) {
+                existingBookingRequest.setFromAddress(patchBookingRequest.getFromAddress());
+            }
+            if (patchBookingRequest.getToAddress() != null) {
+                existingBookingRequest.setToAddress(patchBookingRequest.getToAddress());
+            }
+            if (patchBookingRequest.getNumberOfPeople() != 0) {
+                existingBookingRequest.setNumberOfPeople(patchBookingRequest.getNumberOfPeople());
+            }
+            if (patchBookingRequest.getDistanceInKm() != 0) {
+                existingBookingRequest.setDistanceInKm(patchBookingRequest.getDistanceInKm());
+            }
+            if (patchBookingRequest.getKmPrice() != 0) {
+                existingBookingRequest.setKmPrice(patchBookingRequest.getKmPrice());
+            }
+            if (patchBookingRequest.getTripPrice() != 0) {
+                    existingBookingRequest.setTripPrice(patchBookingRequest.getTripPrice());
+            }
+            if (patchBookingRequest.getCarType() != null) {
+                existingBookingRequest.setCarType(patchBookingRequest.getCarType());
+            }
+            if (patchBookingRequest.getBookingStatus() != null) {
+                existingBookingRequest.setBookingStatus(patchBookingRequest.getBookingStatus());
+            }
 
-        if(updatedBookingRequestDto.getTrip() != null){
-            existingBookingRequest.setTrip(tripRepository.getById(updatedBookingRequestDto.getTrip().getTripId()));
-        }
-        if (updatedBookingRequestDto.getCustomer() != null) {
-            existingBookingRequest.setCustomer(updatedBookingRequestDto.getCustomer());
-        }
-        if (updatedBookingRequestDto.getTripDate() != null) {
-            existingBookingRequest.setTripDate(updatedBookingRequestDto.getTripDate());
-        }
-        if (updatedBookingRequestDto.getTripTime() != null) {
-            existingBookingRequest.setTripTime(updatedBookingRequestDto.getTripTime());
-        }
-        if (updatedBookingRequestDto.getFromAddress() != null) {
-            existingBookingRequest.setFromAddress(updatedBookingRequestDto.getFromAddress());
-        }
-        if (updatedBookingRequestDto.getToAddress() != null) {
-            existingBookingRequest.setToAddress(updatedBookingRequestDto.getToAddress());
-        }
-        if (updatedBookingRequestDto.getNumberOfPeople() != 0) {
-            existingBookingRequest.setNumberOfPeople(updatedBookingRequestDto.getNumberOfPeople());
-        }
-        if (updatedBookingRequestDto.getDistanceInKm() != 0) {
-            existingBookingRequest.setDistanceInKm(updatedBookingRequestDto.getDistanceInKm());
-        }
-        if (updatedBookingRequestDto.getKmPrice() != 0) {
-            existingBookingRequest.setKmPrice(updatedBookingRequestDto.getKmPrice());
-        }
-        if (updatedBookingRequestDto.getTripPrice() != 0) {
-                existingBookingRequest.setTripPrice(updatedBookingRequestDto.getTripPrice());
-        }
-        if (updatedBookingRequestDto.getCarType() != null) {
-            existingBookingRequest.setCarType(updatedBookingRequestDto.getCarType());
-        }
-        if (updatedBookingRequestDto.getBookingStatus() != null) {
-            existingBookingRequest.setBookingStatus(updatedBookingRequestDto.getBookingStatus());
-        }
-
-        bookingRequestRepository.save(existingBookingRequest);
+            bookingRequestRepository.save(existingBookingRequest);
 
             return transferToBookingRequestDto(existingBookingRequest);
         } else {
@@ -144,11 +182,9 @@ public class BookingRequestService {
     }
 
     // Is van client naar server
-    private BookingRequest transferToBooking(BookingRequestDto dto) {
+    private BookingRequest transferToBookingRequest(BookingRequestDto dto) {
         BookingRequest bookingRequest = new BookingRequest();
 
-        bookingRequest.setBookingId(dto.getBookingId());
-        bookingRequest.setCustomer(dto.getCustomer());
         bookingRequest.setTripDate(dto.getTripDate());
         bookingRequest.setTripTime(dto.getTripTime());
         bookingRequest.setFromAddress(dto.getFromAddress());
@@ -163,11 +199,16 @@ public class BookingRequestService {
         return bookingRequest;
     }
 
-    private BookingRequestDto transferToBookingRequestDto(BookingRequest bookingRequest) {
+    public BookingRequestDto transferToBookingRequestDto(BookingRequest bookingRequest) {
         var dto = new BookingRequestDto();
 
         dto.bookingId = bookingRequest.getBookingId();
-        dto.customer = bookingRequest.getCustomer();
+        if (bookingRequest.getCustomer() != null){
+            dto.customer = customerService.transferToCustomerDto(bookingRequest.getCustomer());
+        }
+        if (bookingRequest.getPlanner() != null) {
+            dto.planner = plannerService.transferToPlannerDto(bookingRequest.getPlanner());
+        }
         dto.tripDate = bookingRequest.getTripDate();
         dto.tripTime = bookingRequest.getTripTime();
         dto.fromAddress = bookingRequest.getFromAddress();
@@ -182,22 +223,6 @@ public class BookingRequestService {
         return dto;
     }
 
-    private BookingRequest transferToBookingRequest(BookingRequestDto bookingRequestDto) {
-
-        BookingRequest bookingRequest = new BookingRequest();
-
-        bookingRequest.setTripDate(bookingRequestDto.getTripDate());
-        bookingRequest.setTripTime(bookingRequestDto.getTripTime());
-        bookingRequest.setNumberOfPeople(bookingRequestDto.getNumberOfPeople());
-        bookingRequest.setFromAddress(bookingRequestDto.getFromAddress());
-        bookingRequest.setToAddress(bookingRequestDto.getToAddress());
-        bookingRequest.setDistanceInKm(bookingRequest.getDistanceInKm());
-        bookingRequest.setTripPrice(bookingRequestDto.getTripPrice());
-        bookingRequest.setTrip(bookingRequestDto.getTrip());
-
-        return bookingRequest;
-    }
-
     public double getCorrectKmPrice(CarType carType){
 
         return carType.getPrice();
@@ -209,5 +234,4 @@ public class BookingRequestService {
 
         return Precision.round((basePrice * distanceInKM),2);
     }
-
 }
