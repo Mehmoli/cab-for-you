@@ -1,14 +1,17 @@
 package com.novi.cabforyou.dtos;
 
 import com.fasterxml.jackson.annotation.*;
-import com.novi.cabforyou.models.*;
-
-import java.util.List;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public class TripDto {
     public Long tripId;
+    @NotNull(message = "Field cannot be null")
     @JsonIncludeProperties("username")
-    public Driver driver;
+    public DriverDto driver;
+
+    @NotNull(message = "Field cannot be null", groups = { OnCreateValidation.class, OnUpdateValidation.class })
+    @Valid
     @JsonInclude
     @JsonIncludeProperties({"bookingId",
             "tripDate",
@@ -17,33 +20,12 @@ public class TripDto {
             "toAddress",
             "bookingStatus",
             "carType"})
-    public List<BookingRequest> bookingRequests;
+    public BookingRequestDto bookingRequest;
 
-    public TripDto(Long tripId, Driver driver, List<BookingRequest> bookingRequests) {
+    public TripDto(Long tripId, DriverDto driver, BookingRequestDto bookingRequest) {
         this.tripId = tripId;
         this.driver = driver;
-        this.bookingRequests = bookingRequests;
-    }
-
-    public TripDto() {
-    }
-
-    public static TripDto transferToTripDto(Trip trip) {
-        TripDto tripDto = new TripDto();
-        tripDto.tripId = trip.getTripId();
-        tripDto.driver = trip.getDriver();
-        tripDto.bookingRequests = trip.getBookingRequests();
-        return tripDto;
-    }
-
-    public Trip transferToTrip() {
-
-        Trip trip = new Trip();
-
-        trip.setDriver(driver);
-        trip.setBookingRequests(bookingRequests);
-
-        return trip;
+        this.bookingRequest = bookingRequest;
     }
 
     public Long getTripId() {
@@ -54,20 +36,19 @@ public class TripDto {
         this.tripId = tripId;
     }
 
-    public Driver getDriver() {
+    public DriverDto getDriver() {
         return driver;
     }
 
-    public void setDriver(Driver driver) {
+    public void setDriver(DriverDto driver) {
         this.driver = driver;
     }
 
-    public List<BookingRequest> getBookingRequests() {
-        return bookingRequests;
+    public BookingRequestDto getBookingRequest() {
+        return bookingRequest;
     }
 
-    public void setBookingRequests(List<BookingRequest> bookingRequests) {
-        this.bookingRequests = bookingRequests;
+    public void setBookingRequests(BookingRequestDto bookingRequest) {
+        this.bookingRequest = bookingRequest;
     }
-
 }

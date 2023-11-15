@@ -1,6 +1,10 @@
 package com.novi.cabforyou.dtos;
 
-import com.novi.cabforyou.models.Customer;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDate;
 
@@ -12,9 +16,12 @@ public class FeedbackDto {
 
     public Double rating;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     public LocalDate submitDate;
 
-    public Customer feedbackOfCustomer;
+    @JsonIncludeProperties("username")
+    public CustomerDto customer;
 
     public Long getFeedbackId() {
         return feedbackId;
@@ -48,11 +55,11 @@ public class FeedbackDto {
         this.submitDate = submitDate;
     }
 
-    public Customer getFeedbackOfCustomer() {
-        return feedbackOfCustomer;
+    public CustomerDto getCustomer() {
+        return customer;
     }
 
-    public void setFeedbackOfCustomer(Customer feedbackOfCustomer) {
-        this.feedbackOfCustomer = feedbackOfCustomer;
+    public void setCustomer(CustomerDto customer) {
+        this.customer = customer;
     }
 }

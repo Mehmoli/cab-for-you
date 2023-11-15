@@ -62,39 +62,39 @@ INSERT INTO customers (address, username) VALUES('Lopenstraat 4, Utrecht', 'cabc
 INSERT INTO customers (address, username) VALUES('Rennentraat 5, Rotterdam', 'cabclientfive');
 INSERT INTO customers (address, username) VALUES('Stilstaanstraat 6, Maarssen', 'cabclientsix');
 
---TRIPS
-INSERT INTO trips (trip_id, driver_username) VALUES(3001, 'drivercabone');
-INSERT INTO trips (trip_id, driver_username) VALUES(3002, 'drivercabone');
-INSERT INTO trips (trip_id, driver_username) VALUES(3003, 'drivercabone');
-INSERT INTO trips (trip_id, driver_username) VALUES(3004, 'drivercabtwo');
-INSERT INTO trips (trip_id, driver_username) VALUES(3005, 'drivercabtwo');
-INSERT INTO trips (trip_id, driver_username) VALUES(3006, 'drivercabtwo');
-
 -- --FEEDBACKS
-INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5001, null, 'It''s a nice driver');
-INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5002, null, 'It''s a nice driver');
-INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5003, null, 'It''s a nice driver');
-INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5004, null, 'It''s a nice driver');
-INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5005, null, 'It''s a nice driver');
-INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5006, null, 'It''s a nice driver');
+INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5001, 'cabclientone', 'It''s a nice driver');
+INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5002, 'cabclientone', 'It''s a nice driver');
+INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5003, 'cabclienttwo', 'It''s a nice driver');
+INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5004, 'cabclienttwo', 'It''s a nice driver');
+INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5005, 'cabclientthree', 'It''s a nice driver');
+INSERT INTO public.feedbacks (rating, submit_date, feedback_id, customer_username, feedback) VALUES(5, '2023-10-15', 5006, 'cabclientthree', 'It''s a nice driver');
 
 -- BOOKING REQUESTS
 INSERT INTO public.bookingrequests
-(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, trip_trip_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
-VALUES(50.0, 0.0, 4, '2023-11-21', 0.0, '09:10:00', 1001, 3001, 'CONFIRMED', 'SEDAN', 'cabclientone', 'Amsterdam', '1', '1011 AA', 'Klantenstraat', 'plannercabone', 'Utrecht', '1', '3555 BB', 'Onbekendestraat');
+(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
+VALUES(50.0, 0.0, 4, '2023-11-21', 0.0, '09:10:00', 1001, 'CONFIRMED', 'SEDAN', 'cabclientone', 'Amsterdam', '1', '1011 AA', 'Klantenstraat', 'plannercabone', 'Utrecht', '1', '3555 BB', 'Onbekendestraat');
 INSERT INTO bookingrequests
-(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, trip_trip_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
-VALUES(10.0, 0.0, 6, '2023-11-22', 0.0, '10:10:00', 1002, 3002, 'CONFIRMED', 'MINIBUS', 'cabclientone', 'Utrecht', '1001', '3551 AB', 'Startstraat', 'plannercabone', 'Utrecht', '10', '3525 BA', 'Bestemmingstraat');
+(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
+VALUES(10.0, 0.0, 6, '2023-11-22', 0.0, '10:10:00', 1002, 'CONFIRMED', 'MINIBUS', 'cabclientone', 'Utrecht', '1001', '3551 AB', 'Startstraat', 'plannercabone', 'Utrecht', '10', '3525 BA', 'Bestemmingstraat');
 INSERT INTO bookingrequests
-(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, trip_trip_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
-VALUES(20.0, 0.0, 4, '2023-11-23', 0.0, '11:10:00', 1003, 3003, 'REQUEST', 'SEDAN', 'cabclienttwo', 'Utrecht', '5', '3525 AA', 'Rennerstraat', 'plannercabone', 'Utrecht', '25', '3505 BC', 'Stopstraat');
+(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
+VALUES(20.0, 0.0, 4, '2023-11-23', 0.0, '11:10:00', 1003, 'REQUEST', 'SEDAN', 'cabclienttwo', 'Utrecht', '5', '3525 AA', 'Rennerstraat', 'plannercabone', 'Utrecht', '25', '3505 BC', 'Stopstraat');
 INSERT INTO bookingrequests
-(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, trip_trip_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
-VALUES(55.0, 0.0, 4, '2023-11-24', 0.0, '12:10:00', 1004, 3004, 'REQUEST', 'SEDAN', 'cabclientthree', 'Amsterdam', '1', '1011 AA', 'Klantenstraat', 'plannercabone', 'Utrecht', '1', '3555 BB', 'Onbekendestraat');
+(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
+VALUES(55.0, 0.0, 4, '2023-11-24', 0.0, '12:10:00', 1004, 'REQUEST', 'SEDAN', 'cabclientthree', 'Amsterdam', '1', '1011 AA', 'Klantenstraat', 'plannercabone', 'Utrecht', '1', '3555 BB', 'Onbekendestraat');
 INSERT INTO bookingrequests
-(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, trip_trip_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
-VALUES(30.0, 0.0, 8, '2023-11-26', 0.0, '10:00:00', 1006, 3005, 'REQUEST', 'BIGBUS', 'cabclientfive', 'Utrecht', '22', '3514 TT', 'Beginstraat', 'plannercabone', 'Schiphol', '1', '1111 AA', 'Vertrekpassage');
+(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
+VALUES(30.0, 0.0, 8, '2023-11-26', 0.0, '10:00:00', 1005, 'REQUEST', 'BIGBUS', 'cabclientfive', 'Utrecht', '22', '3514 TT', 'Beginstraat', 'plannercabone', 'Schiphol', '1', '1111 AA', 'Vertrekpassage');
 INSERT INTO bookingrequests
-(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, trip_trip_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
-VALUES(15.0, 0.0, 4, '2023-11-25', 0.0, '08:10:00', 1005, 3006, 'REQUEST', 'WAGON', 'cabclientfour', 'Utrecht', '200', '3518 ZA', 'Runnerstraat', 'plannercabone', 'Breukelen', '100', '3655 KK', 'Straatweg');
+(distance_in_km, km_price, number_of_people, trip_date, trip_price, trip_time, booking_id, booking_status, car_type, customer_username, from_city, from_hnumber, from_pcode, from_street, planner_username, to_city, to_hnumber, to_pcode, to_street)
+VALUES(15.0, 0.0, 4, '2023-11-25', 0.0, '08:10:00', 1006, 'REQUEST', 'WAGON', 'cabclientfour', 'Utrecht', '200', '3518 ZA', 'Runnerstraat', 'plannercabone', 'Breukelen', '100', '3655 KK', 'Straatweg');
+
+--TRIPS
+INSERT INTO trips (trip_id, driver_username, booking_request_booking_id) VALUES(3001, 'drivercabone', 1001);
+INSERT INTO trips (trip_id, driver_username, booking_request_booking_id) VALUES(3002, 'drivercabone', 1002);
+INSERT INTO trips (trip_id, driver_username, booking_request_booking_id) VALUES(3003, 'drivercabone', 1003);
+INSERT INTO trips (trip_id, driver_username, booking_request_booking_id) VALUES(3004, 'drivercabtwo', 1004);
+INSERT INTO trips (trip_id, driver_username, booking_request_booking_id) VALUES(3005, 'drivercabtwo', 1005);
+INSERT INTO trips (trip_id, driver_username, booking_request_booking_id) VALUES(3006, 'drivercabtwo', 1006);
 

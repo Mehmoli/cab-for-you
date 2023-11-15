@@ -1,11 +1,14 @@
 package com.novi.cabforyou.controllers;
 
 import com.novi.cabforyou.dtos.BookingRequestDto;
+import com.novi.cabforyou.dtos.OnCreateValidation;
+import com.novi.cabforyou.dtos.OnUpdateValidation;
 import com.novi.cabforyou.models.BookingRequest;
 import com.novi.cabforyou.models.BookingStatus;
 import com.novi.cabforyou.services.BookingRequestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,13 +38,13 @@ public class BookingRequestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<BookingRequestDto> addBooking(@RequestBody BookingRequestDto dto) {
+    public ResponseEntity<BookingRequestDto> addBooking(@Validated(OnCreateValidation.class) @RequestBody BookingRequestDto dto) {
         BookingRequestDto dto1 = bookingRequestService.addBooking(dto);
         return ResponseEntity.created(null).body(dto1);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<BookingRequestDto> updateBooking(@PathVariable("id") long id, @RequestBody BookingRequestDto dto) {
+    public ResponseEntity<BookingRequestDto> updateBooking(@Validated(OnUpdateValidation.class) @PathVariable("id") long id, @RequestBody BookingRequestDto dto) {
 
         bookingRequestService.updateBooking(id, dto);
 
@@ -67,5 +70,4 @@ public class BookingRequestController {
         List<BookingRequestDto> bookingRequestDto = bookings.stream().map(BookingRequestDto::transferToBookingRequestDto).toList();
         return ResponseEntity.status(HttpStatus.OK).body(bookingRequestDto);
     }
-
 }

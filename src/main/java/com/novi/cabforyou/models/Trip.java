@@ -12,18 +12,19 @@ public class Trip {
     @Id
     @GeneratedValue
     Long tripId;
+
     @JsonIgnore
     @ManyToOne
     Driver driver;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "trip")
-    List<BookingRequest> bookingRequests;
+    @OneToOne
+    BookingRequest bookingRequest;
 
 
     public Trip(Long tripId, Driver driver, List<BookingRequest> bookingRequests) {
         this.tripId = tripId;
         this.driver = driver;
-        this.bookingRequests = bookingRequests;
+        this.bookingRequest = bookingRequest;
     }
 
     public Trip() {
@@ -45,13 +46,14 @@ public class Trip {
         this.driver = driver;
     }
 
-    public List<BookingRequest> getBookingRequests() {
-        return bookingRequests;
+    public BookingRequest getBookingRequest() {
+        return bookingRequest;
     }
 
-    public void setBookingRequests(List<BookingRequest> bookingRequests) {
-        this.bookingRequests = bookingRequests;
+    public void setBookingRequest(BookingRequest bookingRequest) {
+        this.bookingRequest = bookingRequest;
     }
+
 }
 
 

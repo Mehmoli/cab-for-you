@@ -2,7 +2,7 @@ package com.novi.cabforyou.controllers;
 
 import com.novi.cabforyou.FileUpAndDownloadResponse.FileUpAndDownloadResponse;
 import com.novi.cabforyou.models.FileUpAndDownload;
-import com.novi.cabforyou.services.FileUpAndDownloadService;
+import com.novi.cabforyou.services.FileService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -16,23 +16,23 @@ import java.util.Objects;
 
 @CrossOrigin
 @RestController
-public class FileUpAndDownloadController {
+public class FileController {
 
-    private final FileUpAndDownloadService fileUpAndDownloadService;
+    private final FileService fileService;
 
-    public FileUpAndDownloadController(FileUpAndDownloadService fileUpAndDownloadService) {
-        this.fileUpAndDownloadService = fileUpAndDownloadService;
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
     }
 
     @GetMapping("/getAll")
     public Collection<FileUpAndDownload> getAllFromDB() {
-        return fileUpAndDownloadService.getALlFromDB();
+        return fileService.getALlFromDB();
     }
 
     @PostMapping("single/uploadDb")
     public FileUpAndDownloadResponse singleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 
-        FileUpAndDownload fileUpAndDownload = fileUpAndDownloadService.uploadFileDocument(file);
+        FileUpAndDownload fileUpAndDownload = fileService.uploadFileDocument(file);
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFromDB/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
 
         String contentType = file.getContentType();
@@ -42,7 +42,7 @@ public class FileUpAndDownloadController {
 
     @GetMapping("/download/{fileName}")
     ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
-        FileUpAndDownload document = fileUpAndDownloadService.singleFileDownload(fileName, request);
+        FileUpAndDownload document = fileService.singleFileDownload(fileName, request);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + document.getFileName()).body(document.getDocFile());
     }
 

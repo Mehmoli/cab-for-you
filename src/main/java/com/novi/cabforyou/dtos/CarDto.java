@@ -3,6 +3,7 @@ package com.novi.cabforyou.dtos;
 import com.novi.cabforyou.models.CarType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Max;
 
 public class CarDto {
 
@@ -11,13 +12,26 @@ public class CarDto {
     public String make;
 
     public String model;
-
+    @Max(value = 8, message = "We have no cars for more than 8 passengers")
     public int availableSeats;
 
     public String licensePlate;
 
     @Enumerated(EnumType.STRING)
     public CarType carType;
+
+    public CarDto(Long carId, String make, String model, int availableSeats, String licensePlate, CarType carType) {
+        this.carId = carId;
+        this.make = make;
+        this.model = model;
+        this.availableSeats = availableSeats;
+        this.licensePlate = licensePlate;
+        this.carType = carType;
+    }
+
+    public CarDto() {
+
+    }
 
     public Long getCarId() {
         return carId;

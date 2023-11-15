@@ -17,7 +17,6 @@ public class DriverDto {
 
     public Set<Authority> authorities;
 
-
     public String getUsername() {
         return username;
     }
