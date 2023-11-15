@@ -16,11 +16,11 @@ import java.net.MalformedURLException;
 import java.util.*;
 
 @Service
-public class FileUpAndDownloadService {
+public class FileService {
 
     private final FileUpAndDownloadRepository fileUpAndDownloadRepository;
 
-    public FileUpAndDownloadService(FileUpAndDownloadRepository fileUpAndDownloadRepository) {
+    public FileService(FileUpAndDownloadRepository fileUpAndDownloadRepository) {
         this.fileUpAndDownloadRepository = fileUpAndDownloadRepository;
     }
 
