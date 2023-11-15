@@ -19,7 +19,7 @@ public class Customer extends User {
     private List<BookingRequest> bookingRequests = new ArrayList<>();
     @OneToMany(
             targetEntity = Feedback.class,
-            mappedBy = "feedbackOfCustomer",
+            mappedBy = "customer",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
@@ -68,4 +68,5 @@ public class Customer extends User {
     public void setFeedbacks(List<Feedback> feedbacks) {
         this.feedbacks = feedbacks;
     }
+
 }
