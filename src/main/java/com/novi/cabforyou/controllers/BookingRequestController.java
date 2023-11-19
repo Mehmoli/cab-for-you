@@ -4,7 +4,7 @@ import com.novi.cabforyou.dtos.BookingRequestDto;
 import com.novi.cabforyou.dtos.OnCreateValidation;
 import com.novi.cabforyou.dtos.OnUpdateValidation;
 import com.novi.cabforyou.models.BookingRequest;
-import com.novi.cabforyou.models.BookingStatus;
+import com.novi.cabforyou.enums.BookingStatus;
 import com.novi.cabforyou.services.BookingRequestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +63,6 @@ public class BookingRequestController {
         return ResponseEntity.noContent().build();
     }
 
-    // STATUS
     @GetMapping("/status/{status}")
     public ResponseEntity<List<BookingRequestDto>> getBookingRequestsByStatus(@PathVariable("status") BookingStatus status) {
         List<BookingRequest> bookings = bookingRequestService.getBookingRequestsByStatus(status);

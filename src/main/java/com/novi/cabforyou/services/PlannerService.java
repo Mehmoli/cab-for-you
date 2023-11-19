@@ -6,6 +6,7 @@ import com.novi.cabforyou.models.Planner;
 import com.novi.cabforyou.repositories.PlannerRepository;
 import com.novi.cabforyou.repositories.TripRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +19,12 @@ public class PlannerService {
     private final PlannerRepository plannerRepository;
     private final TripRepository tripRepository;
 
-    public PlannerService(PlannerRepository plannerRepository, TripRepository tripRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public PlannerService(PlannerRepository plannerRepository, TripRepository tripRepository, PasswordEncoder passwordEncoder) {
         this.plannerRepository = plannerRepository;
         this.tripRepository = tripRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<PlannerDto> getAllPlanners() {
@@ -57,7 +61,7 @@ public class PlannerService {
         if (optionalPlanner.isPresent()) {
             Planner existingPlanner = optionalPlanner.get();
 
-            existingPlanner.setPassword(updatedPlannerDto.getPassword());
+            existingPlanner.setPassword(passwordEncoder.encode(updatedPlannerDto.getPassword()));
             existingPlanner.setEmail(updatedPlannerDto.getEmail());
             existingPlanner.setEmployeeNumber(updatedPlannerDto.getEmployeeNumber());
             existingPlanner.setPhoneNumber(updatedPlannerDto.getPhoneNumber());
@@ -116,7 +120,7 @@ public class PlannerService {
         Planner planner = new Planner();
 
         planner.setUsername(plannerDto.getUsername());
-        planner.setPassword(plannerDto.getPassword());
+        planner.setPassword(passwordEncoder.encode(plannerDto.getPassword()));
         planner.setEmail(plannerDto.getEmail());
         planner.setEmployeeNumber(plannerDto.getEmployeeNumber());
         planner.setPhoneNumber(plannerDto.getPhoneNumber());

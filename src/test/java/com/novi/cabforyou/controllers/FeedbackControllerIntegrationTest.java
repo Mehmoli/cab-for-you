@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@WithMockUser(username = "user1", roles = {"USER"})
 public class FeedbackControllerIntegrationTest {
 
     @Autowired
@@ -36,7 +38,7 @@ public class FeedbackControllerIntegrationTest {
         int id = 5001; // Replace with a valid id
         mockMvc.perform(get("/feedbacks/" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.feedbackId", is((int) id)));
+                .andExpect(jsonPath("$.feedbackId", is(id)));
     }
 
     @Test

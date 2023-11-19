@@ -5,6 +5,7 @@ import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Customer;
 import com.novi.cabforyou.repositories.CustomerRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,15 +14,19 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-    private CustomerRepository customerRepository;
-    public CustomerService(CustomerRepository customerRepository){
+    private final CustomerRepository customerRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<CustomerDto> getAllCustomers() {
         List<CustomerDto> customerDto = new ArrayList<>();
         List<Customer> customers = customerRepository.findAll();
-        for (Customer cu: customers){
+        for (Customer cu : customers) {
             customerDto.add(transferToCustomerDto(cu));
         }
         return customerDto;
@@ -94,7 +99,7 @@ public class CustomerService {
 
         var dto = new CustomerDto();
 
-        dto.username =cu.getUsername();
+        dto.username = cu.getUsername();
         dto.password = cu.getPassword();
         dto.firstName = cu.getFirstName();
         dto.lastName = cu.getLastName();
@@ -111,7 +116,7 @@ public class CustomerService {
         Customer customer = new Customer();
 
         customer.setUsername(customerDto.getUsername());
-        customer.setPassword(customerDto.getPassword());
+        customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setEmail(customerDto.getEmail());

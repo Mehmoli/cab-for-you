@@ -1,6 +1,6 @@
 package com.novi.cabforyou.dtos;
 
-import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.enums.CarType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;

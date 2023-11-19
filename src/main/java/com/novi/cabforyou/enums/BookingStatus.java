@@ -1,4 +1,4 @@
-package com.novi.cabforyou.models;
+package com.novi.cabforyou.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -11,7 +11,8 @@ public enum BookingStatus {
     COMPLETED("COMPLETED");
 
     private String value;
-    BookingStatus(String value){
+
+    BookingStatus(String value) {
         this.value = value;
     }
 

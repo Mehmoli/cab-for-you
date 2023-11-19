@@ -1,11 +1,6 @@
 package com.novi.cabforyou.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 
@@ -17,17 +12,13 @@ public class Feedback {
     @GeneratedValue
     private Long feedbackId;
 
-    @NotNull(message = "Add feedback here")
+
     private String feedback;
 
-    @NotNull(message = "Please give rating")
-    @Min(value = 1, message = "Min value is 1")
-    @Max(value = 5, message = "Max value is 5")
+
     private Double rating;
 
-    @NotNull(message = "Enter the feedback submission date")
-	@PastOrPresent
-	@JsonFormat(pattern = "dd/mm/yyyy")
+
     private LocalDate submitDate;
 
     @ManyToOne

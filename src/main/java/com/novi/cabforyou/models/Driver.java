@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="drivers")
+@Table(name = "drivers")
 public class Driver extends User {
 
     private String licenceNumber;
     @OneToOne
-    @JoinColumn(name="car_id")
+    @JoinColumn(name = "car_id")
     private Car car;
 
     @OneToMany(
@@ -22,7 +22,8 @@ public class Driver extends User {
     @JsonIgnore
     private List<Trip> trips;
 
-    public Driver() {}
+    public Driver() {
+    }
 
     public Driver(String username, String password, Set<Authority> authorities, String email, String firstName, String lastName, String phoneNumber, String licenceNumber, Car car) {
         super(username, password, authorities, email, firstName, lastName, phoneNumber);
@@ -59,8 +60,12 @@ public class Driver extends User {
         this.trips = trips;
     }
 
-    public void addTrip(Trip trip) {this.trips.add(trip);}
+    public void addTrip(Trip trip) {
+        this.trips.add(trip);
+    }
 
-    public void deleteTrip(Trip trip) {this.trips.remove(trip);}
+    public void deleteTrip(Trip trip) {
+        this.trips.remove(trip);
+    }
 
 }

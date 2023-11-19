@@ -6,6 +6,8 @@ import com.novi.cabforyou.exceptions.UsernameNotFoundException;
 import com.novi.cabforyou.models.Authority;
 import com.novi.cabforyou.models.User;
 import com.novi.cabforyou.repositories.UserRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +19,11 @@ import java.util.Set;
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDto> getUsers() {
@@ -41,20 +46,23 @@ public class UserService {
         return dto;
     }
 
-    public void updateUser (String username, UserDto newUser){
-        if (!userRepository.existsById(username)) throw  new RecordNotFoundException();
+    public void updateUser(String username, UserDto newUser) {
+        if (!userRepository.existsById(username)) throw new RecordNotFoundException();
         User user = userRepository.findById(username).get();
-        user.setPassword(newUser.getPassword());
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(user);
 
     }
 
-    public void deleteUser(String username){
+    public void deleteUser(String username) {
         userRepository.deleteById(username);
     }
 
     public String createUser(UserDto userDto) {
-        User newUser = userRepository.save(toUser(userDto));
+        User newUser = toUser(userDto);
+
+        userRepository.save(newUser);
+
         return newUser.getUsername();
     }
 
@@ -102,7 +110,7 @@ public class UserService {
         var user = new User();
 
         user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());

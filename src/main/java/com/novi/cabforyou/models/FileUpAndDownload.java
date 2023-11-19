@@ -1,13 +1,16 @@
 package com.novi.cabforyou.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class FileUpAndDownload {
 
     @Id
     @GeneratedValue
-    private  long id;
+    private long id;
     private String fileName;
 
     @Lob

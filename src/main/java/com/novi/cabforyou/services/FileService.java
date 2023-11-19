@@ -13,7 +13,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
 
 @Service
 public class FileService {

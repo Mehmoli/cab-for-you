@@ -1,7 +1,7 @@
 package com.novi.cabforyou.dtos;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.novi.cabforyou.models.Authority;
-
 
 import java.util.Set;
 
@@ -14,8 +14,10 @@ public class UserDto {
     public String email;
     public String firstName;
     public String lastName;
+
     public String phoneNumber;
 
+    @JsonSerialize
     public Set<Authority> authorities;
 
     public String getUsername() {

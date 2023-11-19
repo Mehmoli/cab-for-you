@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/cars")
 public class CarController {
 
-    private CarService carService;
+    private final CarService carService;
 
     public CarController(CarService carService) {
         this.carService = carService;

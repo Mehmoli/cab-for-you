@@ -34,7 +34,6 @@ public class UserController {
 
         UserDto optionalUser = userService.getUser(username);
 
-
         return ResponseEntity.ok().body(optionalUser);
 
     }
@@ -43,7 +42,6 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto) {
 
         String newUsername = userService.createUser(dto);
-
 
         userService.addAuthority(newUsername, "ROLE_USER");
 

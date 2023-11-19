@@ -1,6 +1,7 @@
 package com.novi.cabforyou.dtos;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,7 +11,7 @@ public class TripDto {
     @JsonIncludeProperties("username")
     public DriverDto driver;
 
-    @NotNull(message = "Field cannot be null", groups = { OnCreateValidation.class, OnUpdateValidation.class })
+    @NotNull(message = "Field cannot be null", groups = {OnCreateValidation.class, OnUpdateValidation.class})
     @Valid
     @JsonInclude
     @JsonIncludeProperties({"bookingId",
