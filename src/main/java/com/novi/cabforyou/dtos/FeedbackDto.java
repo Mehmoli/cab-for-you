@@ -24,7 +24,7 @@ public class FeedbackDto {
     public Double rating;
     @NotNull(message = "Enter the feedback submission date")
     @PastOrPresent
-    @JsonFormat(pattern = "dd/mm/yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     public LocalDate submitDate;
