@@ -61,7 +61,7 @@ public class PlannerService {
         if (optionalPlanner.isPresent()) {
             Planner existingPlanner = optionalPlanner.get();
 
-            existingPlanner.setPassword(updatedPlannerDto.getPassword());
+            existingPlanner.setPassword(passwordEncoder.encode(updatedPlannerDto.getPassword()));
             existingPlanner.setEmail(updatedPlannerDto.getEmail());
             existingPlanner.setEmployeeNumber(updatedPlannerDto.getEmployeeNumber());
             existingPlanner.setPhoneNumber(updatedPlannerDto.getPhoneNumber());
