@@ -20,7 +20,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    public UserService(UserRepository userRepository,@Lazy PasswordEncoder passwordEncoder) {
+
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -45,23 +46,24 @@ public class UserService {
         return dto;
     }
 
-    public void updateUser (String username, UserDto newUser){
-        if (!userRepository.existsById(username)) throw  new RecordNotFoundException();
+    public void updateUser(String username, UserDto newUser) {
+        if (!userRepository.existsById(username)) throw new RecordNotFoundException();
         User user = userRepository.findById(username).get();
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(user);
 
     }
 
-    public void deleteUser(String username){
+    public void deleteUser(String username) {
         userRepository.deleteById(username);
     }
+
     public String createUser(UserDto userDto) {
         User newUser = toUser(userDto);
 
         userRepository.save(newUser);
 
-        return newUser.getUsername() ;
+        return newUser.getUsername();
     }
 
     public Set<Authority> getAuthorities(String username) {

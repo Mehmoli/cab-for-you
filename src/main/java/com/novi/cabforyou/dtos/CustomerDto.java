@@ -14,10 +14,11 @@ public class CustomerDto {
     public String firstName;
     public String lastName;
     public String address;
-    
+
     public String phoneNumber;
 
     public Set<Authority> authorities;
+
     public String getAddress() {
         return address;
     }

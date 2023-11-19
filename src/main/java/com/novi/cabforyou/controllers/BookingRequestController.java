@@ -63,7 +63,6 @@ public class BookingRequestController {
         return ResponseEntity.noContent().build();
     }
 
-    // STATUS
     @GetMapping("/status/{status}")
     public ResponseEntity<List<BookingRequestDto>> getBookingRequestsByStatus(@PathVariable("status") BookingStatus status) {
         List<BookingRequest> bookings = bookingRequestService.getBookingRequestsByStatus(status);

@@ -22,7 +22,7 @@ public class TripController {
     @GetMapping("")
     public ResponseEntity<List<TripDto>> getTrips() {
         var trips = tripService.getAllTrips().stream().map(tripService::transferToTripDto).toList();
-        if (trips.stream().anyMatch(Objects::isNull)){
+        if (trips.stream().anyMatch(Objects::isNull)) {
             ResponseEntity.badRequest();
         }
         return ResponseEntity.ok().body(trips);
@@ -31,7 +31,7 @@ public class TripController {
     @GetMapping("{id}")
     public ResponseEntity<TripDto> getTrip(@PathVariable Long id) {
         TripDto trip = tripService.transferToTripDto(tripService.getTrip(id));
-        if (trip == null){
+        if (trip == null) {
             ResponseEntity.badRequest();
         }
         return ResponseEntity.ok().body(trip);

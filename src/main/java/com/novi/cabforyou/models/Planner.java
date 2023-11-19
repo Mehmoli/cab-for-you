@@ -1,7 +1,6 @@
 package com.novi.cabforyou.models;
 
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;

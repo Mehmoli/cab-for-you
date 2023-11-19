@@ -3,7 +3,6 @@ package com.novi.cabforyou.dtos;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.novi.cabforyou.models.Authority;
 
-
 import java.util.Set;
 
 public class UserDto {

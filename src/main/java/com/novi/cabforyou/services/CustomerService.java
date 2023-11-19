@@ -14,10 +14,11 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     private final PasswordEncoder passwordEncoder;
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder){
+
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -25,7 +26,7 @@ public class CustomerService {
     public List<CustomerDto> getAllCustomers() {
         List<CustomerDto> customerDto = new ArrayList<>();
         List<Customer> customers = customerRepository.findAll();
-        for (Customer cu: customers){
+        for (Customer cu : customers) {
             customerDto.add(transferToCustomerDto(cu));
         }
         return customerDto;
@@ -98,7 +99,7 @@ public class CustomerService {
 
         var dto = new CustomerDto();
 
-        dto.username =cu.getUsername();
+        dto.username = cu.getUsername();
         dto.password = cu.getPassword();
         dto.firstName = cu.getFirstName();
         dto.lastName = cu.getLastName();

@@ -37,10 +37,10 @@ public class BookingRequestService {
         this.plannerRepository = plannerRepository;
     }
 
-    public List<BookingRequestDto> getAllBookings(){
+    public List<BookingRequestDto> getAllBookings() {
         List<BookingRequestDto> bookingRequestDto = new ArrayList<>();
         List<BookingRequest> bookingRequests = bookingRequestRepository.findAll();
-        for (BookingRequest b: bookingRequests){
+        for (BookingRequest b : bookingRequests) {
             bookingRequestDto.add(transferToBookingRequestDto(b));
         }
         return bookingRequestDto;
@@ -48,7 +48,7 @@ public class BookingRequestService {
 
     public BookingRequestDto getBooking(long id) {
         Optional<BookingRequest> booking = bookingRequestRepository.findById(id);
-        if(booking.isPresent()) {
+        if (booking.isPresent()) {
             return transferToBookingRequestDto(booking.get());
         } else {
             throw new RecordNotFoundException("No booking found!!!");
@@ -80,8 +80,8 @@ public class BookingRequestService {
         return bookingRequestDto;
     }
 
-    public void updateBooking (Long id, BookingRequestDto newBooking){
-        if(!bookingRequestRepository.existsById(id)) throw new RecordNotFoundException("BookingRequest not found");
+    public void updateBooking(Long id, BookingRequestDto newBooking) {
+        if (!bookingRequestRepository.existsById(id)) throw new RecordNotFoundException("BookingRequest not found");
         BookingRequest bookingRequest = bookingRequestRepository.findById(id).get();
 
         CalculatedTripAndKmPriceSetter(newBooking, bookingRequest);
@@ -99,7 +99,7 @@ public class BookingRequestService {
 
     private void CalculatedTripAndKmPriceSetter(BookingRequestDto newBooking, BookingRequest bookingRequest) {
         CarType selectedCarType = newBooking.getCarType();
-        double kmPrice= getCorrectKmPrice(selectedCarType);
+        double kmPrice = getCorrectKmPrice(selectedCarType);
         newBooking.setKmPrice(kmPrice);
         bookingRequest.setKmPrice(kmPrice);
 
@@ -117,7 +117,7 @@ public class BookingRequestService {
         if (optionalBookingRequest.isPresent()) {
             BookingRequest existingBookingRequest = optionalBookingRequest.get();
 
-            if(patchBookingRequest.getTrip() != null){
+            if (patchBookingRequest.getTrip() != null) {
                 existingBookingRequest.setTrip(tripRepository.getReferenceById(patchBookingRequest.getTrip().getTripId()));
             }
             if (patchBookingRequest.getCustomer() != null) {
@@ -156,7 +156,7 @@ public class BookingRequestService {
                 existingBookingRequest.setKmPrice(patchBookingRequest.getKmPrice());
             }
             if (patchBookingRequest.getTripPrice() != 0) {
-                    existingBookingRequest.setTripPrice(patchBookingRequest.getTripPrice());
+                existingBookingRequest.setTripPrice(patchBookingRequest.getTripPrice());
             }
             if (patchBookingRequest.getCarType() != null) {
                 existingBookingRequest.setCarType(patchBookingRequest.getCarType());
@@ -173,7 +173,7 @@ public class BookingRequestService {
         }
     }
 
-    public void deleteBooking (long id){
+    public void deleteBooking(long id) {
         bookingRequestRepository.deleteById(id);
     }
 
@@ -203,7 +203,7 @@ public class BookingRequestService {
         var dto = new BookingRequestDto();
 
         dto.bookingId = bookingRequest.getBookingId();
-        if (bookingRequest.getCustomer() != null){
+        if (bookingRequest.getCustomer() != null) {
             dto.customer = customerService.transferToCustomerDto(bookingRequest.getCustomer());
         }
         if (bookingRequest.getPlanner() != null) {
@@ -212,7 +212,7 @@ public class BookingRequestService {
         dto.tripDate = bookingRequest.getTripDate();
         dto.tripTime = bookingRequest.getTripTime();
         dto.fromAddress = bookingRequest.getFromAddress();
-        dto.toAddress= bookingRequest.getToAddress();
+        dto.toAddress = bookingRequest.getToAddress();
         dto.numberOfPeople = bookingRequest.getNumberOfPeople();
         dto.distanceInKm = bookingRequest.getDistanceInKm();
         dto.kmPrice = bookingRequest.getKmPrice();
@@ -223,7 +223,7 @@ public class BookingRequestService {
         return dto;
     }
 
-    public double getCorrectKmPrice(CarType carType){
+    public double getCorrectKmPrice(CarType carType) {
 
         return carType.getPrice();
     }
@@ -232,6 +232,6 @@ public class BookingRequestService {
 
         double basePrice = carType.getPrice();
 
-        return Precision.round((basePrice * distanceInKM),2);
+        return Precision.round((basePrice * distanceInKM), 2);
     }
 }

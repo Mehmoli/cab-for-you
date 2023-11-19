@@ -11,7 +11,8 @@ public enum BookingStatus {
     COMPLETED("COMPLETED");
 
     private String value;
-    BookingStatus(String value){
+
+    BookingStatus(String value) {
         this.value = value;
     }
 

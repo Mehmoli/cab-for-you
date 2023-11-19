@@ -2,10 +2,8 @@ package com.novi.cabforyou.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import com.novi.cabforyou.models.BookingStatus;
-import com.novi.cabforyou.models.CarType;
 import com.novi.cabforyou.models.*;
-import jakarta.persistence.*;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;

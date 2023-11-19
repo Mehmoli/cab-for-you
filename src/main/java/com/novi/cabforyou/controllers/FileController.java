@@ -45,7 +45,5 @@ public class FileController {
         FileUpAndDownload document = fileService.singleFileDownload(fileName, request);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + document.getFileName()).body(document.getDocFile());
     }
-
-
 }
 

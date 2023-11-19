@@ -1,10 +1,10 @@
 package com.novi.cabforyou.services;
 
+import com.novi.cabforyou.dtos.CarDto;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.Car;
 import com.novi.cabforyou.models.CarType;
 import com.novi.cabforyou.repositories.CarRepository;
-import com.novi.cabforyou.dtos.CarDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

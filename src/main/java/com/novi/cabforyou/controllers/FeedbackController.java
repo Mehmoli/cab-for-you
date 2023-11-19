@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/feedbacks")
 public class FeedbackController {
 
-    private FeedbackService feedbackService;
+    private final FeedbackService feedbackService;
 
     public FeedbackController(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;

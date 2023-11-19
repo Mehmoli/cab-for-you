@@ -4,7 +4,9 @@ import com.novi.cabforyou.dtos.BookingRequestDto;
 import com.novi.cabforyou.dtos.DriverDto;
 import com.novi.cabforyou.dtos.TripDto;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
-import com.novi.cabforyou.models.*;
+import com.novi.cabforyou.models.BookingRequest;
+import com.novi.cabforyou.models.Driver;
+import com.novi.cabforyou.models.Trip;
 import com.novi.cabforyou.repositories.BookingRequestRepository;
 import com.novi.cabforyou.repositories.DriverRepository;
 import com.novi.cabforyou.repositories.TripRepository;
@@ -87,7 +89,7 @@ public class TripService {
         DriverDto driver;
         BookingRequestDto bookingRequest;
 
-        if (trip.getDriver() != null && trip.getBookingRequest() != null){
+        if (trip.getDriver() != null && trip.getBookingRequest() != null) {
             driver = driverService.transferToDriverDto(trip.getDriver());
             bookingRequest = bookingRequestService.transferToBookingRequestDto(trip.getBookingRequest());
 

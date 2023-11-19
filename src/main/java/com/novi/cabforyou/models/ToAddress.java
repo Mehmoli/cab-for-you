@@ -22,7 +22,7 @@ public class ToAddress {
     @Size(max = 50)
     private String toCity;
 
-    public ToAddress(){
+    public ToAddress() {
     }
 
     public ToAddress(String toStreet, String toHouseNumber, String toPostalCode, String toCity) {

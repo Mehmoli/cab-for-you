@@ -59,6 +59,7 @@ public class BookingRequest {
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus = BookingStatus.REQUEST;
+
     public Long getBookingId() {
         return bookingId;
     }

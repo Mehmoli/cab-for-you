@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/planners")
 public class PlannerController {
-    private PlannerService plannerService;
+    private final PlannerService plannerService;
 
     public PlannerController(PlannerService plannerService) {
         this.plannerService = plannerService;
@@ -52,5 +52,4 @@ public class PlannerController {
         PlannerDto updatedDto = plannerService.patchPlanner(username, updatedPlannerDto);
         return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
     }
-
 }

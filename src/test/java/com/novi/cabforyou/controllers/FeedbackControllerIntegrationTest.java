@@ -38,7 +38,7 @@ public class FeedbackControllerIntegrationTest {
         int id = 5001; // Replace with a valid id
         mockMvc.perform(get("/feedbacks/" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.feedbackId", is((int) id)));
+                .andExpect(jsonPath("$.feedbackId", is(id)));
     }
 
     @Test

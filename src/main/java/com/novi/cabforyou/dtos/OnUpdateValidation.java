@@ -1,3 +1,4 @@
 package com.novi.cabforyou.dtos;
 
-public interface OnUpdateValidation {}
+public interface OnUpdateValidation {
+}

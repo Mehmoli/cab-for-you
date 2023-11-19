@@ -1,12 +1,13 @@
 package com.novi.cabforyou.models;
 
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -85,6 +86,7 @@ public class User {
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }
+
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
     }

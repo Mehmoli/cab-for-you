@@ -10,7 +10,7 @@ public enum CarType {
     private int seatsAvailable;
     private final String value;
 
-    private CarType(String value, double kmPrice, int seatsAvailable) {
+    CarType(String value, double kmPrice, int seatsAvailable) {
         this.value = value;
         this.kmPrice = kmPrice;
         this.seatsAvailable = seatsAvailable;
@@ -21,7 +21,7 @@ public enum CarType {
     }
 
     public void setKmPrice(double kmPrice) {
-       this.kmPrice = kmPrice;
+        this.kmPrice = kmPrice;
     }
 
     public int getSeatsAvailable() {
