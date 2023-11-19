@@ -2,6 +2,8 @@ package com.novi.cabforyou.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.novi.cabforyou.enums.BookingStatus;
+import com.novi.cabforyou.enums.CarType;
 import com.novi.cabforyou.models.*;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;

@@ -1,5 +1,6 @@
 package com.novi.cabforyou.models;
 
+import com.novi.cabforyou.enums.CarType;
 import jakarta.persistence.*;
 
 @Entity

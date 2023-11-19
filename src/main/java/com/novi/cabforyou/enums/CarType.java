@@ -1,4 +1,4 @@
-package com.novi.cabforyou.models;
+package com.novi.cabforyou.enums;
 
 public enum CarType {
     SEDAN("SEDAN", 2.65, 4),

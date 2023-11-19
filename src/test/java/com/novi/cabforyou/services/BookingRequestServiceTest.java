@@ -1,6 +1,8 @@
 package com.novi.cabforyou.services;
 
 import com.novi.cabforyou.dtos.BookingRequestDto;
+import com.novi.cabforyou.enums.BookingStatus;
+import com.novi.cabforyou.enums.CarType;
 import com.novi.cabforyou.models.*;
 import com.novi.cabforyou.repositories.BookingRequestRepository;
 import com.novi.cabforyou.repositories.CustomerRepository;

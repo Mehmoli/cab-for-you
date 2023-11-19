@@ -1,8 +1,8 @@
 package com.novi.cabforyou.controllers;
 
 import com.novi.cabforyou.dtos.BookingRequestDto;
-import com.novi.cabforyou.models.BookingStatus;
-import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.enums.BookingStatus;
+import com.novi.cabforyou.enums.CarType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;

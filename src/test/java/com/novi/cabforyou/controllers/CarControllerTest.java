@@ -3,7 +3,7 @@ package com.novi.cabforyou.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novi.cabforyou.dtos.CarDto;
 import com.novi.cabforyou.models.Car;
-import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.enums.CarType;
 import com.novi.cabforyou.services.CarService;
 import com.novi.cabforyou.services.CustomUserDetailsService;
 import com.novi.cabforyou.utils.JwtUtil;

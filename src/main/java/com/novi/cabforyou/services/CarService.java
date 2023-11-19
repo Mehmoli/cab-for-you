@@ -3,7 +3,7 @@ package com.novi.cabforyou.services;
 import com.novi.cabforyou.dtos.CarDto;
 import com.novi.cabforyou.exceptions.RecordNotFoundException;
 import com.novi.cabforyou.models.Car;
-import com.novi.cabforyou.models.CarType;
+import com.novi.cabforyou.enums.CarType;
 import com.novi.cabforyou.repositories.CarRepository;
 import org.springframework.stereotype.Service;
 

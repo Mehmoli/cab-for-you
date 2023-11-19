@@ -1,5 +1,7 @@
 package com.novi.cabforyou.models;
 
+import com.novi.cabforyou.enums.BookingStatus;
+import com.novi.cabforyou.enums.CarType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
