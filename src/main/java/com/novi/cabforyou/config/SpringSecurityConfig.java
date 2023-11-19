@@ -61,10 +61,10 @@ public class SpringSecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/users").hasAnyRole("USER", "PLANNER")
                         .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("USER", "PLANNER")
-                        .requestMatchers(HttpMethod.GET, "/users/{username}").hasRole("USER")
-                        .requestMatchers(HttpMethod.PUT, "/users/{username}").hasAnyRole("USER", "PLANNER")
+                        .requestMatchers(HttpMethod.GET, "/users/{username}/**").hasRole("PLANNER")
+                        .requestMatchers(HttpMethod.PUT, "/users/{username}/**").hasRole("PLANNER")
                         .requestMatchers(HttpMethod.POST, "/users/**").hasRole("PLANNER")
-                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("PLANNER")
+                        .requestMatchers(HttpMethod.DELETE, "/users/{username}/**").hasRole("PLANNER")
 
                         .requestMatchers(HttpMethod.GET, "/customers/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/customers/**").hasRole("USER")
@@ -93,6 +93,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/bookings/**").hasAnyRole("USER", "PLANNER")
                         .requestMatchers(HttpMethod.PUT, "/bookings/**").hasAnyRole("USER", "PLANNER")
                         .requestMatchers(HttpMethod.PATCH, "/bookings/**").hasAnyRole("USER", "PLANNER")
+                        .requestMatchers(HttpMethod.DELETE, "/bookings/**").hasAnyRole("USER", "PLANNER")
                         .requestMatchers(HttpMethod.GET, "/bookings/{status}").hasRole("PLANNER")
 
                         .requestMatchers(HttpMethod.POST, "/trips").hasRole("PLANNER")
@@ -100,7 +101,7 @@ public class SpringSecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/getAll").hasAnyRole("USER", "DRIVER", "PLANNER")
                         .requestMatchers(HttpMethod.GET, "/download/**").hasAnyRole("USER", "DRIVER", "PLANNER")
-                        .requestMatchers(HttpMethod.POST, "/single/**").hasAnyRole("USER", "DRIVER", "PLANNER")
+                        .requestMatchers(HttpMethod.POST, "/single/uploadDb").hasAnyRole("USER", "DRIVER", "PLANNER")
 
                         .requestMatchers("/authenticated").authenticated()
                         .requestMatchers("/authenticate").permitAll()
