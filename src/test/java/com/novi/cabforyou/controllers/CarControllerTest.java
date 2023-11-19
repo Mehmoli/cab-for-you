@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novi.cabforyou.dtos.CarDto;
 import com.novi.cabforyou.models.Car;
 import com.novi.cabforyou.models.CarType;
-import com.novi.cabforyou.repositories.CarRepository;
 import com.novi.cabforyou.services.CarService;
+import com.novi.cabforyou.services.CustomUserDetailsService;
+import com.novi.cabforyou.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +18,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
 
 import java.util.List;
 
@@ -31,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CarController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@WithMockUser(username = "testdriver", roles = "DRIVER")
 class CarControllerTest {
 
     @Autowired
@@ -38,6 +42,12 @@ class CarControllerTest {
 
     @MockBean
     private CarService carService;
+
+    @MockBean
+    JwtUtil jwtUtil;
+
+    @MockBean
+    CustomUserDetailsService customUserDetailsService;
 
     Car car1;
     Car car2;
