@@ -62,7 +62,7 @@ public class DriverService {
         if (optionalDriver.isPresent()) {
             Driver existingDriver = optionalDriver.get();
 
-            existingDriver.setPassword(updatedDriverDto.getPassword());
+            existingDriver.setPassword(passwordEncoder.encode(updatedDriverDto.getPassword()));
             existingDriver.setEmail(updatedDriverDto.getEmail());
             existingDriver.setLicenceNumber(updatedDriverDto.getLicenceNumber());
             existingDriver.setPhoneNumber(updatedDriverDto.getPhoneNumber());
