@@ -6,6 +6,7 @@ import com.novi.cabforyou.models.Customer;
 import com.novi.cabforyou.models.Feedback;
 import com.novi.cabforyou.repositories.CustomerRepository;
 import com.novi.cabforyou.repositories.FeedbackRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -77,8 +78,13 @@ public class FeedbackService {
         }
     }
 
+    @Transactional
     public void deleteFeedback(long id) {
-        feedbackRepository.deleteById(id);
+        feedbackRepository.findById(id).ifPresent(feedback -> {
+            Customer customer = feedback.getCustomer();
+            customer.getFeedbacks().remove(feedback);
+            feedbackRepository.delete(feedback);
+        });
     }
 
     private Feedback transferToFeedback(FeedbackDto feedbackDto) {
